@@ -55,6 +55,8 @@ export const section5Data = [
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit posuere sem, vel aliquam arcu. Mauris commodo orci sed ultricies posuere. Pellentesque sed facilisis sapien. Vestibulum et ante porttitor turpis sollicitudin consequat...",
     image: "/images/carousel.jpg",
+    width: 742,
+    height: 928,
   },
   {
     title: "Case Study",
@@ -62,6 +64,8 @@ export const section5Data = [
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit posuere sem, vel aliquam arcu. Mauris commodo orci sed ultricies posuere. Pellentesque sed facilisis sapien. Vestibulum et ante porttitor turpis sollicitudin consequat...",
     image: "/images/carousel.jpg",
+    width: 742,
+    height: 928,
   },
   {
     title: "Case Study",
@@ -69,5 +73,7 @@ export const section5Data = [
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus hendrerit posuere sem, vel aliquam arcu. Mauris commodo orci sed ultricies posuere. Pellentesque sed facilisis sapien. Vestibulum et ante porttitor turpis sollicitudin consequat...",
     image: "/images/carousel.jpg",
+    width: 742,
+    height: 928,
   },
 ];

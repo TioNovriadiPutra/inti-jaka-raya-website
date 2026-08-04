@@ -4,3 +4,7 @@ export { default as TimeIcon } from "./time.svg";
 export { default as ShieldIcon } from "./shield.svg";
 export { default as TemperatureIcon } from "./temperature.svg";
 export { default as CheckIcon } from "./check.svg";
+export { default as FacebookIcon } from "./facebook.svg";
+export { default as TwitterIcon } from "./twitter.svg";
+export { default as InstagramIcon } from "./instagram.svg";
+export { default as DotText } from "./dot.svg";

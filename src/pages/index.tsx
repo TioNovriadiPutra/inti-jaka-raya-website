@@ -1,9 +1,123 @@
 import { Flex } from "@/components/shared";
 import { UPSLogo } from "../../public";
-import { section3Data, section4Data } from "@/utils/constant";
+import { section3Data, section4Data, section5Data } from "@/utils/constant";
 import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const Home = () => {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const carouselIndexRef = useRef(0);
+  const autoScrollTimerRef = useRef<number | undefined>(undefined);
+  const scrollEndTimerRef = useRef<number | undefined>(undefined);
+  const scheduleAutoScrollRef = useRef<() => void>(() => undefined);
+  const isAutoScrollingRef = useRef(false);
+  const isResettingCarouselRef = useRef(false);
+  const [activeCarouselIndex, setActiveCarouselIndex] = useState(0);
+  const [progressCycle, setProgressCycle] = useState(0);
+
+  const getCarouselStep = useCallback(() => {
+    const firstSlide = carouselRef.current?.firstElementChild
+      ?.firstElementChild as HTMLElement | null;
+
+    return firstSlide ? firstSlide.offsetWidth + 16 : 0;
+  }, []);
+
+  const scheduleAutoScroll = useCallback(() => {
+    window.clearTimeout(autoScrollTimerRef.current);
+    if (document.hidden) return;
+
+    window.requestAnimationFrame(() => {
+      setProgressCycle((currentCycle) => currentCycle + 1);
+    });
+
+    autoScrollTimerRef.current = window.setTimeout(() => {
+      const carousel = carouselRef.current;
+      const step = getCarouselStep();
+      if (!carousel || !step) return;
+
+      const nextIndex = carouselIndexRef.current + 1;
+      const nextActiveIndex = nextIndex % section5Data.length;
+
+      isAutoScrollingRef.current = true;
+      carouselIndexRef.current = nextIndex;
+      setActiveCarouselIndex(nextActiveIndex);
+      carousel.scrollTo({ left: nextIndex * step, behavior: "smooth" });
+      scheduleAutoScrollRef.current();
+    }, 3000);
+  }, [getCarouselStep]);
+
+  useEffect(() => {
+    scheduleAutoScrollRef.current = scheduleAutoScroll;
+  }, [scheduleAutoScroll]);
+
+  useEffect(() => {
+    scheduleAutoScroll();
+
+    const handleVisibilityChange = () => {
+      window.clearTimeout(autoScrollTimerRef.current);
+      if (!document.hidden) scheduleAutoScroll();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.clearTimeout(autoScrollTimerRef.current);
+      window.clearTimeout(scrollEndTimerRef.current);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [scheduleAutoScroll]);
+
+  const handleCarouselScroll = () => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    if (isResettingCarouselRef.current) {
+      isResettingCarouselRef.current = false;
+      return;
+    }
+
+    if (isAutoScrollingRef.current) {
+      window.clearTimeout(scrollEndTimerRef.current);
+
+      scrollEndTimerRef.current = window.setTimeout(() => {
+        const step = getCarouselStep();
+        if (!step) return;
+
+        let nextIndex = Math.round(carousel.scrollLeft / step);
+
+        if (nextIndex >= section5Data.length) {
+          isResettingCarouselRef.current = true;
+          carousel.scrollTo({ left: 0, behavior: "auto" });
+          nextIndex = 0;
+        }
+
+        carouselIndexRef.current = nextIndex;
+        isAutoScrollingRef.current = false;
+      }, 150);
+
+      return;
+    }
+
+    window.clearTimeout(autoScrollTimerRef.current);
+    window.clearTimeout(scrollEndTimerRef.current);
+
+    scrollEndTimerRef.current = window.setTimeout(() => {
+      const step = getCarouselStep();
+      if (!step) return;
+
+      let nextIndex = Math.round(carousel.scrollLeft / step);
+
+      if (nextIndex >= section5Data.length) {
+        carousel.scrollTo({ left: 0, behavior: "auto" });
+        nextIndex = 0;
+      }
+
+      carouselIndexRef.current = nextIndex;
+      setActiveCarouselIndex(nextIndex);
+      scheduleAutoScroll();
+    }, 150);
+  };
+
   return (
     <Flex className="grow basis-0">
       {/* Section 1 */}
@@ -55,7 +169,7 @@ const Home = () => {
       </Flex>
 
       {/* Section 3 */}
-      <Flex className="px-3.5 py-16 bg-neutral-50 -mt-px">
+      <Flex className="px-3.5 py-16 -mt-px">
         <h3 className="text-center font-medium text-neutral-800 mb-6">
           Trusted services
           <br />
@@ -108,7 +222,7 @@ const Home = () => {
             return (
               <Flex
                 key={index.toString()}
-                className={`w-83 h-70.75 justify-center px-6 ${index < section4Data.length - 1 ? "border-b border-b-neutral-200" : ""}`}
+                className={`w-full h-70.75 justify-center px-6 ${index < section4Data.length - 1 ? "border-b border-b-neutral-200" : ""}`}
               >
                 <Flex className="size-14 bg-white rounded-[14px] shadow-[2px_2px_24px_rgba(0,0,0,0.1)] items-center justify-center mb-6">
                   <Icon />
@@ -129,16 +243,85 @@ const Home = () => {
       </Flex>
 
       {/* Section 5 */}
-      <Flex className="px-3.5 pt-10 pb-21.5 bg-neutral-50 -mt-px">
-        <h3 className="text-center font-medium text-neutral-800">
+      <Flex className="px-3.5 pt-10 pb-21.5 -mt-px">
+        <h3 className="text-center font-medium text-neutral-800 mb-10">
           See how we solve problems,
           <br />
-          <span className="font-bold text-neutral-400 mb-10">
-            right on target
-          </span>
+          <span className="font-bold text-neutral-400">right on target</span>
         </h3>
 
-        <Flex className="flex-row!"></Flex>
+        <Flex className="gap-8">
+          <div
+            ref={carouselRef}
+            className="carousel overflow-x-auto snap-x snap-mandatory"
+            onScroll={handleCarouselScroll}
+          >
+            <div className="flex w-max gap-4">
+              {[...section5Data, section5Data[0]].map((item, index) => {
+                const isDuplicate = index === section5Data.length;
+
+                return (
+                  <div
+                    key={`${isDuplicate ? "duplicate" : "original"}-${index}`}
+                    className="flex flex-col shrink-0 snap-start overflow-hidden w-[calc(100dvw-1.75rem)] h-137.5 rounded-[14px] bg-neutral-50"
+                    aria-hidden={isDuplicate || undefined}
+                  >
+                    <Image
+                      src={item.image}
+                      alt={isDuplicate ? "" : `Carousel ${index + 1}`}
+                      width={item.width}
+                      height={item.height}
+                      className="w-full h-67.75 object-cover object-center"
+                    />
+
+                    <Flex className="flex-1 pt-6 px-3.5">
+                      <p className="text-body-s font-semibold text-neutral-500 mb-3.5">
+                        {item.subTitle}
+                      </p>
+
+                      <h5 className="font-semibold text-neutral-800 mb-7">
+                        {item.title}
+                      </h5>
+
+                      <p className="text-body-s text-neutral-500 mb-8 line-clamp-3">
+                        {item.description}
+                      </p>
+
+                      <button
+                        type="button"
+                        className="flex px-6 py-[11.5px] bg-accent-600 self-start rounded-3xl text-body-xs font-bold text-white"
+                        tabIndex={isDuplicate ? -1 : undefined}
+                      >
+                        View Case Study
+                      </button>
+                    </Flex>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <Flex className="flex-row! gap-4.5">
+            {Array.from({ length: section5Data.length }).map((_, index) => (
+              <Flex
+                key={index.toString()}
+                className="relative h-0.75 flex-1 bg-neutral-200 rounded-full"
+              >
+                <div
+                  className={`h-full rounded-full bg-accent-600 ${
+                    index < activeCarouselIndex
+                      ? "w-full"
+                      : index === activeCarouselIndex
+                        ? progressCycle % 2 === 0
+                          ? "carousel-progress-a"
+                          : "carousel-progress-b"
+                        : "w-0"
+                  }`}
+                />
+              </Flex>
+            ))}
+          </Flex>
+        </Flex>
       </Flex>
     </Flex>
   );

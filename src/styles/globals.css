@@ -152,3 +152,46 @@ h4 {
 h5 {
   @apply text-h5-mobile md:text-h5-desktop;
 }
+
+.carousel {
+  scrollbar-width: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes carousel-progress {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.carousel-progress-a {
+  animation: carousel-progress 3s linear forwards;
+}
+
+@keyframes carousel-progress-alternate {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.carousel-progress-b {
+  animation: carousel-progress-alternate 3s linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-progress-a,
+  .carousel-progress-b {
+    animation-timing-function: steps(1, end);
+  }
+}
