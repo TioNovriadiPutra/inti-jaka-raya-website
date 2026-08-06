@@ -1,22 +1,15 @@
-import { CSSProperties, ReactNode } from "react";
+import { ComponentPropsWithoutRef, forwardRef } from "react";
 
-type Props = {
-  children?: ReactNode;
-  className?: string;
-  style?: CSSProperties;
-  onClick?: () => void;
-};
+type Props = ComponentPropsWithoutRef<"div">;
 
-const Flex = ({ children, className, style, onClick }: Props) => {
-  return (
-    <div
-      className={`flex flex-col ${className}`}
-      style={style}
-      onClick={onClick}
-    >
+const Flex = forwardRef<HTMLDivElement, Props>(
+  ({ children, className = "", ...props }, ref) => (
+    <div ref={ref} className={`flex flex-col ${className}`} {...props}>
       {children}
     </div>
-  );
-};
+  ),
+);
+
+Flex.displayName = "Flex";
 
 export default Flex;

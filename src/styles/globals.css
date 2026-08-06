@@ -153,6 +153,14 @@ h5 {
   @apply text-h5-mobile md:text-h5-desktop;
 }
 
+input::placeholder {
+  @apply text-neutral-600;
+}
+
+button {
+  @apply cursor-pointer;
+}
+
 .carousel {
   scrollbar-width: none;
 }

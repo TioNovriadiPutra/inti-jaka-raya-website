@@ -19,6 +19,7 @@
   },
   "include": [
     "svg.d.ts",
+    "reactQuery.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
