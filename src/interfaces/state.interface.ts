@@ -1,3 +1,5 @@
+import { DropdownType } from "./form.interface";
+
 export interface LoadingState {
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
@@ -19,4 +21,9 @@ export interface ToastState {
 export interface ModalState {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
+}
+
+export interface FilterState {
+  filter: DropdownType;
+  setFilter: (filter: DropdownType) => void;
 }

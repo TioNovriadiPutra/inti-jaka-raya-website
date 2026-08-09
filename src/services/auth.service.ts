@@ -23,3 +23,13 @@ export const checkIsLoggedIn = async () => {
     throw errorResponse(error);
   }
 };
+
+export const logout = async (): Promise<ResType> => {
+  try {
+    const response = await axiosInstance.get("/auth/logout");
+
+    return response.data;
+  } catch (error) {
+    throw errorResponse(error);
+  }
+};

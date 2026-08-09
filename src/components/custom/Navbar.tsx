@@ -23,9 +23,9 @@ const Navbar = () => {
   const setLoginModal = useLoginModal((state) => state.setShowModal);
   const isLoggedIn = useAuth((state) => state.isLoggedIn);
 
-  const { useCheckIsLoggedInService } = useAuthController();
+  const { useCheckIsLoggedInService, logoutService } = useAuthController();
 
-  const { isLoading } = useCheckIsLoggedInService();
+  const { isLoading, isRefetching } = useCheckIsLoggedInService();
 
   useEffect(() => {
     if (!settingOpen) return;
@@ -187,7 +187,7 @@ const Navbar = () => {
               ))}
             </Flex>
 
-            {isLoading ? (
+            {isLoading || isRefetching ? (
               <Ring2
                 size="32"
                 stroke="4"
@@ -221,13 +221,20 @@ const Navbar = () => {
                       className="flex flex-col absolute right-0 top-[110%] z-50 w-44 bg-white p-2 border border-neutral-200 rounded-[14px] origin-top-right"
                     >
                       <Link
-                        href="/dashboard"
+                        href="/cms/products"
                         className="px-2.5 py-3 text-body-s text-neutral-700 rounded-lg hover:bg-accent-50 hover:text-accent-600 duration-300 transition-colors"
+                        onClick={() => setSettingOpen(false)}
                       >
                         Dashboard
                       </Link>
 
-                      <button className="flex px-2.5 py-3 text-body-s text-neutral-700 rounded-lg hover:bg-accent-50 hover:text-accent-600 duration-300 transition-colors">
+                      <button
+                        className="flex px-2.5 py-3 text-body-s text-neutral-700 rounded-lg hover:bg-accent-50 hover:text-accent-600 duration-300 transition-colors"
+                        onClick={() => {
+                          setSettingOpen(false);
+                          logoutService();
+                        }}
+                      >
                         Logout
                       </button>
                     </motion.div>

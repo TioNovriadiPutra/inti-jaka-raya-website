@@ -1,9 +1,11 @@
 import {
   AuthState,
+  FilterState,
   LoadingState,
   ModalState,
   ToastState,
 } from "@/interfaces/state.interface";
+import { labelFilter } from "@/utils/constant";
 import { create } from "zustand";
 
 export const useLoading = create<LoadingState>((set) => ({
@@ -27,4 +29,9 @@ export const useToast = create<ToastState>((set) => ({
 export const useLoginModal = create<ModalState>((set) => ({
   showModal: false,
   setShowModal: (show) => set({ showModal: show }),
+}));
+
+export const useLabelFilter = create<FilterState>((set) => ({
+  filter: labelFilter[0],
+  setFilter: (filter) => set({ filter }),
 }));

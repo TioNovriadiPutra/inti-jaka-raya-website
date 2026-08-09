@@ -1,3 +1,4 @@
+import { Box1, ClipboardText, Document } from "iconsax-reactjs";
 import {
   ChartIcon,
   CheckIcon,
@@ -207,3 +208,52 @@ export const dummyDetailData = {
   title: "THISTLEBOND METAL REPAIR PASTE",
   image: "",
 };
+
+export const cmsSidebarData = [
+  {
+    icon: Box1,
+    dest: "/cms/products",
+  },
+  {
+    icon: Document,
+    dest: "/cms/case-studies",
+  },
+  {
+    icon: ClipboardText,
+    dest: "/cms/labels",
+  },
+];
+
+export const productFilter = [
+  {
+    label: "All",
+    value: "all",
+  },
+  {
+    label: "Showing",
+    value: "show",
+  },
+  {
+    label: "Hidden",
+    value: "hidden",
+  },
+];
+
+export const labelFilter = [
+  {
+    label: "Category",
+    value: "category",
+  },
+  {
+    label: "Industry",
+    value: "industry",
+  },
+  {
+    label: "Application",
+    value: "application",
+  },
+  {
+    label: "Division",
+    value: "division",
+  },
+];
