@@ -1,5 +1,6 @@
 import {
   AuthState,
+  DeleteModalState,
   FilterState,
   LoadingState,
   ModalState,
@@ -34,4 +35,12 @@ export const useLoginModal = create<ModalState>((set) => ({
 export const useLabelFilter = create<FilterState>((set) => ({
   filter: labelFilter[0],
   setFilter: (filter) => set({ filter }),
+}));
+
+export const useDeleteModal = create<DeleteModalState>((set) => ({
+  showModal: false,
+  itemName: "",
+  onDelete: undefined,
+  setShowModal: (showModal, itemName, onDelete) =>
+    set({ showModal, itemName, onDelete }),
 }));

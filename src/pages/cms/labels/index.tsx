@@ -220,6 +220,10 @@ const CMSLabels = () => {
                                         key={idxAction.toString()}
                                         type="button"
                                         className="flex px-2.5 py-3 rounded-lg hover:bg-neutral-100 duration-300 transition-colors text-body-s text-neutral-700"
+                                        onClick={() => {
+                                          setOpenMenu(null);
+                                          action.onClick();
+                                        }}
                                       >
                                         {action.label}
                                       </button>

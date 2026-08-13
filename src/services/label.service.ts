@@ -34,3 +34,49 @@ export const getLabels = async (
     throw errorResponse(error);
   }
 };
+
+export const getLabelById = async (
+  id: number,
+  type: string,
+): Promise<ResType<CategoryDTO | IndustryDTO>> => {
+  try {
+    const response = await axiosInstance.get(
+      `/label/detail/${id}?type=${type}`,
+    );
+
+    return response.data;
+  } catch (error) {
+    throw errorResponse(error);
+  }
+};
+
+export const updateLabel = async (
+  id: number,
+  body: LabelInput,
+): Promise<ResType> => {
+  try {
+    const response = await axiosInstance.put(`/label/edit/${id}`, {
+      ...body,
+      labelType: body.labelType ? body.labelType.value : "",
+    });
+
+    return response.data;
+  } catch (error) {
+    throw errorResponse(error);
+  }
+};
+
+export const deleteLabel = async (
+  id: number,
+  type: string,
+): Promise<ResType> => {
+  try {
+    const response = await axiosInstance.delete(
+      `/label/delete/${id}?type=${type}`,
+    );
+
+    return response.data;
+  } catch (error) {
+    throw errorResponse(error);
+  }
+};

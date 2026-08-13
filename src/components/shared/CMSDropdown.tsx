@@ -10,9 +10,10 @@ type Props = {
   label: string;
   items: DropdownType[];
   error?: FieldError;
+  disabled?: boolean;
 };
 
-const CMSDropdown = ({ field, label, items, error }: Props) => {
+const CMSDropdown = ({ field, label, items, error, disabled }: Props) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +45,8 @@ const CMSDropdown = ({ field, label, items, error }: Props) => {
 
       <button
         type="button"
-        className={`flex items-center px-3.5 py-2 bg-white border ${error ? "border-red-500" : "border-neutral-200"} rounded-md`}
+        disabled={disabled}
+        className={`flex items-center px-3.5 py-2 ${disabled ? "bg-neutral-100" : "bg-white"} border ${error ? "border-red-500" : "border-neutral-200"} rounded-md ${disabled ? "cursor-not-allowed!" : ""}`}
         onClick={() => setOpenDropdown((prev) => !prev)}
       >
         <p className="flex-1 text-body-xs text-neutral-900 text-left">

@@ -27,3 +27,14 @@ export interface FilterState {
   filter: DropdownType;
   setFilter: (filter: DropdownType) => void;
 }
+
+export interface DeleteModalState {
+  showModal: boolean;
+  setShowModal: (
+    show: boolean,
+    itemName: string,
+    onDelete?: () => void,
+  ) => void;
+  itemName: string;
+  onDelete?: () => void;
+}
