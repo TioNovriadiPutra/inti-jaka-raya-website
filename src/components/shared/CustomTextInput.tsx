@@ -5,7 +5,6 @@ import { Eye, EyeSlash } from "iconsax-reactjs";
 
 type Props = {
   label: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   field: ControllerRenderProps<any, any>;
   placeholder: string;
   type?: HTMLInputTypeAttribute;

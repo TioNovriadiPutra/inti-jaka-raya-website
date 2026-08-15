@@ -8,7 +8,7 @@ type Props = {
 const CMSFormContainer = ({ children, onSubmit }: Props) => {
   return (
     <form
-      className="flex flex-col grow basis-0 px-6 py-3.5 gap-4 max-w-245.5 mx-auto"
+      className="flex flex-col grow basis-0 px-6 py-3.5 gap-4 max-w-245.5 mx-auto overflow-auto"
       onSubmit={onSubmit}
     >
       {children}

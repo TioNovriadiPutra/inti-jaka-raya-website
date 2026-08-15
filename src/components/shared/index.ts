@@ -6,3 +6,4 @@ export { default as CMSContainer } from "./CMSContainer";
 export { default as CMSFormContainer } from "./CMSFormContainer";
 export { default as CMSTextInput } from "./CMSTextInput";
 export { default as CMSDropdown } from "./CMSDropdown";
+export { default as CMSTextArea } from "./CMSTextArea";

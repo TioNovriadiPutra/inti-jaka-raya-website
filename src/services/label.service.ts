@@ -86,3 +86,17 @@ export const deleteLabel = async (
     throw errorResponse(error);
   }
 };
+
+export const getLabelDropdown = async (
+  type: "categories" | "industries" | "applications" | "divisions",
+): Promise<
+  ResType<(CategoryDTO | IndustryDTO | ApplicationDTO | DivisionDTO)[]>
+> => {
+  try {
+    const response = await axiosInstance.get(`/dropdown?type=${type}`);
+
+    return response.data;
+  } catch (error) {
+    throw errorResponse(error);
+  }
+};
