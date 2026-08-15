@@ -84,5 +84,69 @@ export default async function handler(
         },
       },
     });
+  } else if (type === "application") {
+    const { data, error, count } = await supabase
+      .from("applications")
+      .select("*", {
+        count: "exact",
+      })
+      .order("created_at", {
+        ascending: false,
+      })
+      .range(from, to);
+
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+        data: {},
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Data fetched!",
+      data: {
+        data,
+        meta: {
+          count,
+          page,
+          limit: 10,
+          total: Math.ceil((count ?? 0) / 10),
+        },
+      },
+    });
+  } else if (type === "division") {
+    const { data, error, count } = await supabase
+      .from("divisions")
+      .select("*", {
+        count: "exact",
+      })
+      .order("created_at", {
+        ascending: false,
+      })
+      .range(from, to);
+
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+        data: {},
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Data fetched!",
+      data: {
+        data,
+        meta: {
+          count,
+          page,
+          limit: 10,
+          total: Math.ceil((count ?? 0) / 10),
+        },
+      },
+    });
   }
 }

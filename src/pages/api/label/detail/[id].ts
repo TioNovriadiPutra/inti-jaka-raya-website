@@ -57,5 +57,45 @@ export default async function handler(
       message: "Data fetched!",
       data,
     });
+  } else if (type === "application") {
+    const { data, error } = await supabase
+      .from("applications")
+      .select()
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+        data: {},
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Data fetched!",
+      data,
+    });
+  } else if (type === "division") {
+    const { data, error } = await supabase
+      .from("divisions")
+      .select()
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+        data: {},
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Data fetched!",
+      data,
+    });
   }
 }

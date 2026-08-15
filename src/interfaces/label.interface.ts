@@ -17,3 +17,11 @@ export interface CategoryDTO extends LabelDTO {
 export interface IndustryDTO extends LabelDTO {
   industry_name: string;
 }
+
+export interface ApplicationDTO extends LabelDTO {
+  application_name: string;
+}
+
+export interface DivisionDTO extends LabelDTO {
+  division_name: string;
+}

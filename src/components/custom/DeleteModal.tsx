@@ -76,7 +76,7 @@ const DeleteModal = () => {
                     color="white"
                   />
                 ) : (
-                  "Logout"
+                  "Delete"
                 )}
               </button>
             </Flex>

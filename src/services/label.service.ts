@@ -1,5 +1,7 @@
 import {
+  ApplicationDTO,
   CategoryDTO,
+  DivisionDTO,
   IndustryDTO,
   LabelInput,
 } from "@/interfaces/label.interface";
@@ -23,7 +25,9 @@ export const createLabel = async (body: LabelInput): Promise<ResType> => {
 export const getLabels = async (
   page: number,
   type: string,
-): Promise<MetaResType<(CategoryDTO | IndustryDTO)[]>> => {
+): Promise<
+  MetaResType<(CategoryDTO | IndustryDTO | ApplicationDTO | DivisionDTO)[]>
+> => {
   try {
     const response = await axiosInstance.get(
       `/label?page=${page}&type=${type}`,
@@ -38,7 +42,9 @@ export const getLabels = async (
 export const getLabelById = async (
   id: number,
   type: string,
-): Promise<ResType<CategoryDTO | IndustryDTO>> => {
+): Promise<
+  ResType<CategoryDTO | IndustryDTO | ApplicationDTO | DivisionDTO>
+> => {
   try {
     const response = await axiosInstance.get(
       `/label/detail/${id}?type=${type}`,

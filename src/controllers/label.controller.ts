@@ -72,14 +72,20 @@ const useLabelController = () => {
         finalData = {
           data: data.data.data.map((item) => ({
             row: [
-              "category_name" in item ? item.category_name : item.industry_name,
+              "category_name" in item
+                ? item.category_name
+                : "industry_name" in item
+                  ? item.industry_name
+                  : "application_name" in item
+                    ? item.application_name
+                    : item.division_name,
             ],
             actions: [
               {
                 label: "Edit",
                 onClick: () =>
                   route.push(
-                    `/cms/labels/edit/${item.id}?type=${"category_name" in item ? "category" : "industry"}`,
+                    `/cms/labels/edit/${item.id}?type=${"category_name" in item ? "category" : "industry_name" in item ? "industry" : "application_name" in item ? "application" : "division"}`,
                   ),
               },
               {
@@ -89,11 +95,22 @@ const useLabelController = () => {
                     true,
                     "category_name" in item
                       ? item.category_name
-                      : item.industry_name,
+                      : "industry_name" in item
+                        ? item.industry_name
+                        : "application_name" in item
+                          ? item.application_name
+                          : item.division_name,
                     () =>
                       deleteLabelMutation.mutate({
                         id: item.id,
-                        type: "category_name" in item ? "category" : "industry",
+                        type:
+                          "category_name" in item
+                            ? "category"
+                            : "industry_name" in item
+                              ? "industry"
+                              : "application_name" in item
+                                ? "application"
+                                : "division",
                       }),
                   );
                 },
@@ -134,9 +151,20 @@ const useLabelController = () => {
           labelName:
             "category_name" in data.data
               ? data.data.category_name
-              : data.data.industry_name,
+              : "industry_name" in data.data
+                ? data.data.industry_name
+                : "application_name" in data.data
+                  ? data.data.application_name
+                  : data.data.division_name,
           labelType: {
-            label: type === "category" ? "Category" : "Industry",
+            label:
+              type === "category"
+                ? "Category"
+                : type === "industry"
+                  ? "Industry"
+                  : type === "application"
+                    ? "Application"
+                    : "Division",
             value: type,
           },
         };

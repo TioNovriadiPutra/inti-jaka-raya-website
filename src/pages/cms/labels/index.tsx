@@ -106,9 +106,7 @@ const CMSLabels = () => {
         >
           <AddCircle size={14} color="white" />
 
-          <p className="text-body-xs font-bold text-white">
-            Create {filter.filter.label}
-          </p>
+          <p className="text-body-xs font-bold text-white">Create Label</p>
         </button>
       </Flex>
 
