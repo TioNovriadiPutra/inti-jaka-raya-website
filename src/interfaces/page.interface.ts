@@ -3,6 +3,7 @@ import { MetaType } from "./res.interface";
 export interface TableActionType {
   label: string;
   onClick: () => void;
+  isLoading?: boolean;
 }
 
 export interface TableDataType {

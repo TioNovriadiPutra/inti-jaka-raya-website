@@ -14,6 +14,14 @@ export const getImageDimensions = async (file: FormidableFile) => {
   };
 };
 
+export const getFilePath = (url: string) => {
+  const splitUrl = url.split("/");
+  const splitUrlLength = splitUrl.length;
+  const filePath = `${splitUrl[splitUrlLength - 2]}/${splitUrl[splitUrlLength - 1]}`;
+
+  return filePath;
+};
+
 export const uploadImage = async (
   file: FormidableFile,
   supabase: SupabaseClient<any, "public", "public", any, any>,

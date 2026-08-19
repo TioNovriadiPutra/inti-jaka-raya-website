@@ -6,7 +6,7 @@ import {
   ModalState,
   ToastState,
 } from "@/interfaces/state.interface";
-import { labelFilter } from "@/utils/constant";
+import { labelFilter, productFilter } from "@/utils/constant";
 import { create } from "zustand";
 
 export const useLoading = create<LoadingState>((set) => ({
@@ -43,4 +43,9 @@ export const useDeleteModal = create<DeleteModalState>((set) => ({
   onDelete: undefined,
   setShowModal: (showModal, itemName, onDelete) =>
     set({ showModal, itemName, onDelete }),
+}));
+
+export const useProductFilter = create<FilterState>((set) => ({
+  filter: productFilter[0],
+  setFilter: (filter) => set({ filter }),
 }));

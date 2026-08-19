@@ -3,6 +3,7 @@ import { createSupabaseClient } from "@/utils/supabase";
 import { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import type { File as FormidableFile } from "formidable";
+import { ProductSectionInput } from "@/interfaces/product.interface";
 
 export const config = {
   api: {
@@ -36,8 +37,10 @@ export default async function handler(
     const category = Number(fields.category?.[0] ?? 0);
     const application = Number(fields.application?.[0] ?? 0);
 
+    const thumbnail = files.thumbnail![0] as FormidableFile;
     const galleries = (files.galleries ?? []) as FormidableFile[];
     const documents = (files.documents ?? []) as FormidableFile[];
+    const descriptions = JSON.parse(fields.descriptions?.[0] ?? "[]");
 
     const supabase = createSupabaseClient(req, res);
 
@@ -63,13 +66,35 @@ export default async function handler(
     }
 
     try {
+      const image = await uploadImage(thumbnail, supabase);
+
+      const { error: productGalleryError } = await supabase
+        .from("product_galleries")
+        .insert({
+          ...image,
+          is_thumbnail: true,
+          product_id: data.id,
+        });
+
+      if (error) {
+        throw productGalleryError;
+      }
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+        data: {},
+      });
+    }
+
+    try {
       const images = await Promise.all(
-        galleries.map(async (gallery: FormidableFile, index: number) => {
+        galleries.map(async (gallery: FormidableFile) => {
           const image = await uploadImage(gallery, supabase);
 
           return {
             ...image,
-            is_thumbnail: index === 0,
+            is_thumbnail: false,
             product_id: data.id,
           };
         }),
@@ -84,7 +109,6 @@ export default async function handler(
         throw error;
       }
     } catch (error: any) {
-      console.log(error);
       return res.status(400).json({
         success: false,
         message: error.message,
@@ -119,6 +143,22 @@ export default async function handler(
         data: {},
       });
     }
+
+    descriptions.forEach(async (desc: ProductSectionInput) => {
+      const { error } = await supabase.from("product_descriptions").insert({
+        title: desc.title,
+        description: desc.description,
+        product_id: data.id,
+      });
+
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+          data: {},
+        });
+      }
+    });
 
     return res.status(201).json({
       success: true,
