@@ -46,9 +46,12 @@ export const createProduct = async (body: ProductInput): Promise<ResType> => {
 
 export const getProducts = async (
   page: number,
+  type: string,
 ): Promise<MetaResType<ProductDTO[]>> => {
   try {
-    const response = await axiosInstance.get(`/product?page=${page}`);
+    const response = await axiosInstance.get(
+      `/product?page=${page}&type=${type}`,
+    );
 
     return response.data;
   } catch (error) {

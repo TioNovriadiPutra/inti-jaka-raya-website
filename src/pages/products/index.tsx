@@ -94,21 +94,21 @@ const Products = () => {
   return (
     <Flex className="grow basis-0 bg-white">
       {/* Section 1 */}
-      <Flex className="px-3.5 py-6">
+      <Flex className="px-3.5 md:px-15 py-6">
         <Breadcrumb pages={["Home", "Products"]} color="dark" />
       </Flex>
 
       {/* Section 2 */}
-      <Flex className="px-3.5 pt-3.5 pb-16 gap-10">
+      <Flex className="px-3.5 md:px-15 pt-3.5 pb-16 gap-10">
         <h3 className="font-medium text-neutral-800 text-center">
-          Discover the Perfect{" "}
+          Discover the Perfect <br className="hidden md:flex" />
           <span className="font-bold text-neutral-400">
             Solution for Your Needs.
           </span>
         </h3>
 
         <Flex className="gap-6">
-          <Flex className="flex-row! items-center px-6 py-3 border border-neutral-200 rounded-3xl">
+          <Flex className="flex-row! items-center px-6 py-3 border border-neutral-200 rounded-3xl md:w-109 md:self-center lg:mb-10">
             <Controller
               control={control}
               name="search"
@@ -126,8 +126,8 @@ const Products = () => {
             </button>
           </Flex>
 
-          <Flex className="gap-3.5">
-            <Flex className="flex-row! gap-3.5 overflow-x-auto overflow-y-visible">
+          <Flex className="gap-3.5 md:gap-6 lg:flex-row!">
+            <Flex className="flex-row! gap-3.5 overflow-x-auto overflow-y-visible lg:flex-1">
               {filterData.map((filter, index) => {
                 const isOpen = openDropdown === index;
 
@@ -218,37 +218,40 @@ const Products = () => {
 
           <Flex className="h-px bg-neutral-200" />
 
-          {dummyData.map((item, index) => (
-            <button
-              type="button"
-              key={index.toString()}
-              onClick={() => {
-                router.push(`/products/article/${index + 1}`);
-              }}
-            >
-              <Image
-                src={item.image}
-                alt={`Product ${index + 1}`}
-                width={item.width}
-                height={item.height}
-                className="w-full h-62.25 object-cover object-center rounded-lg"
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {dummyData.map((item, index) => (
+              <button
+                type="button"
+                key={index.toString()}
+                className="flex flex-col"
+                onClick={() => {
+                  router.push(`/products/article/${index + 1}`);
+                }}
+              >
+                <Image
+                  src={item.image}
+                  alt={`Product ${index + 1}`}
+                  width={item.width}
+                  height={item.height}
+                  className="w-full h-62.25 object-cover object-center rounded-lg"
+                />
 
-              <Flex className="p-3.5 gap-0.5 w-full items-start">
-                <p className="text-body-xs font-semibold text-accent-600">
-                  {item.tag}
-                </p>
+                <Flex className="p-3.5 gap-0.5 w-full items-start">
+                  <p className="text-body-xs font-semibold text-accent-600">
+                    {item.tag}
+                  </p>
 
-                <p className="text-body-xs font-semibold text-neutral-700">
-                  {item.title}
-                </p>
-              </Flex>
-            </button>
-          ))}
+                  <p className="text-body-xs font-semibold text-neutral-700">
+                    {item.title}
+                  </p>
+                </Flex>
+              </button>
+            ))}
+          </div>
 
           <button
             type="button"
-            className="px-4.5 py-3 border border-neutral-200 rounded-3xl text-body-s font-semibold text-neutral-600"
+            className="px-4.5 py-3 border border-neutral-200 rounded-3xl text-body-s font-semibold text-neutral-600 shadow-lg self-center"
           >
             Show More
           </button>

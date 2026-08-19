@@ -231,7 +231,22 @@ export const productFilter = [
   },
   {
     label: "Showing",
-    value: "show",
+    value: "showing",
+  },
+  {
+    label: "Hidden",
+    value: "hidden",
+  },
+];
+
+export const caseStudyFilter = [
+  {
+    label: "All",
+    value: "all",
+  },
+  {
+    label: "Showing",
+    value: "showing",
   },
   {
     label: "Hidden",

@@ -11,7 +11,9 @@ const Sidebar = () => {
   return (
     <Flex className="w-12 bg-white border-r border-r-neutral-200">
       <Flex className="flex-1 gap-4 px-2 py-5 items-center">
-        <Logo />
+        <Link href="/">
+          <Logo />
+        </Link>
 
         {cmsSidebarData.map((item, index) => {
           const Icon = item.icon;

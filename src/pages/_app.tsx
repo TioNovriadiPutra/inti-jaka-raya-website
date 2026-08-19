@@ -11,11 +11,12 @@ import {
   LogoFull,
   TwitterIcon,
 } from "../../public";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "@/components/custom/Toast";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -37,6 +38,14 @@ export default function App({ Component, pageProps }: AppProps) {
 
   const isCMS = router.pathname.includes("cms");
 
+  useLayoutEffect(() => {
+    scrollContainerRef.current?.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "auto",
+    });
+  }, [router.asPath]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Flex className="relative w-dvw h-dvh overflow-hidden">
@@ -44,6 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
         <Flex className="relative flex-1 overflow-hidden bg-neutral-50">
           <Flex
+            ref={scrollContainerRef}
             className={`${isCMS ? "flex-row!" : ""} z-20 flex-1 overflow-y-auto`}
           >
             {isCMS && <Sidebar />}

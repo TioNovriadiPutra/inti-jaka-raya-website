@@ -1,4 +1,4 @@
-import { CMSContainer, Flex } from "@/components/shared";
+import { CMSContainer, EmptyState, Flex } from "@/components/shared";
 import { productFilter } from "@/utils/constant";
 import {
   AddCircle,
@@ -277,6 +277,13 @@ const CMSProducts = () => {
                   ))}
                 </tbody>
               </table>
+
+              {finalData.data.length === 0 && (
+                <EmptyState
+                  title="Product data is empty"
+                  description="There are no products to display. Create a new item to add your first product."
+                />
+              )}
             </Flex>
           </Flex>
         )}

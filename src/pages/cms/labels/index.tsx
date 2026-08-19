@@ -21,6 +21,20 @@ const CMSLabels = () => {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const openMenuRef = useRef<HTMLDivElement>(null);
 
+  const filter = useLabelFilter();
+
+  const route = useRouter();
+
+  const { control } = useForm({
+    defaultValues: {
+      search: "",
+    },
+  });
+
+  const { useGetLabelsService } = useLabelController();
+
+  const { finalData, isLoading } = useGetLabelsService(page);
+
   useEffect(() => {
     if (openMenu === null) return;
 
@@ -40,19 +54,9 @@ const CMSLabels = () => {
     };
   }, [openMenu]);
 
-  const filter = useLabelFilter();
-
-  const route = useRouter();
-
-  const { control } = useForm({
-    defaultValues: {
-      search: "",
-    },
-  });
-
-  const { useGetLabelsService } = useLabelController();
-
-  const { finalData, isLoading } = useGetLabelsService(page);
+  useEffect(() => {
+    filter.setFilter(labelFilter[0]);
+  }, []);
 
   return (
     <CMSContainer>

@@ -17,13 +17,18 @@ import {
   updateProduct,
   updaterProductStatus,
 } from "@/services/product.service";
-import { useDeleteModal, useLoading } from "@/stores/page.store";
+import {
+  useDeleteModal,
+  useLoading,
+  useProductFilter,
+} from "@/stores/page.store";
 import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
 const useProductController = () => {
   const isLoading = useLoading((state) => state.isLoading);
   const setDeleteModal = useDeleteModal((state) => state.setShowModal);
+  const productFilter = useProductFilter((state) => state.filter);
 
   const route = useRouter();
 
@@ -166,8 +171,8 @@ const useProductController = () => {
       isError,
       error,
     } = useQuery({
-      queryKey: ["getProducts", page],
-      queryFn: () => getProducts(page),
+      queryKey: ["getProducts", page, productFilter.value],
+      queryFn: () => getProducts(page, productFilter.value),
     });
 
     let finalData: TableType = {

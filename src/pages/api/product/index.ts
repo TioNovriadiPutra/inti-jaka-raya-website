@@ -13,26 +13,30 @@ export default async function handler(
     });
   }
 
-  const { page } = req.query;
+  const { page, type } = req.query;
 
   const from = (Number(page) - 1) * 10;
   const to = from + 10 - 1;
 
   const supabase = createSupabaseClient(req, res);
 
-  const { data, error, count } = await supabase
-    .from("products")
-    .select(
-      `
+  let query = supabase.from("products").select(
+    `
       id,
       product_code,
       product_name,
       is_showing
     `,
-      {
-        count: "exact",
-      },
-    )
+    {
+      count: "exact",
+    },
+  );
+
+  if (type !== "all") {
+    query = query.eq("is_showing", type === "showing");
+  }
+
+  const { data, error, count } = await query
     .order("created_at", {
       ascending: false,
     })
