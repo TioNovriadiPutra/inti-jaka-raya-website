@@ -78,3 +78,8 @@ export interface ProductDetailDTO {
   documents: ProductDocumentDTO[];
   descriptions: ProductDescriptionDTO[];
 }
+
+export interface ProductDTO {
+  id: number;
+  product_name: string;
+}

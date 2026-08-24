@@ -2,7 +2,13 @@ import formidable from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
 import type { File as FormidableFile } from "formidable";
 import { createSupabaseClient } from "@/utils/supabase";
-import { getFilePath, uploadFile, uploadImage } from "@/utils/helperServer";
+import {
+  getFilePath,
+  initiateLogger,
+  methodNotAllowedError,
+  uploadFile,
+  uploadImage,
+} from "@/utils/helperServer";
 import { ProductSectionInput } from "@/interfaces/product.interface";
 
 export const config = {
@@ -15,12 +21,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  const log = initiateLogger(req);
+
   if (req.method !== "PUT") {
-    return res.status(405).json({
-      success: false,
-      message: "Method not allowed",
-      data: {},
-    });
+    return methodNotAllowedError(res, log.log);
   }
 
   try {
@@ -130,7 +134,7 @@ export default async function handler(
       }
 
       try {
-        const image = await uploadImage(newThumbnail, supabase);
+        const image = await uploadImage(newThumbnail, supabase, "products");
 
         const { error: thumbnailError } = await supabase
           .from("product_galleries")
@@ -197,7 +201,7 @@ export default async function handler(
     try {
       const images = await Promise.all(
         newGalleries.map(async (gallery: FormidableFile) => {
-          const image = await uploadImage(gallery, supabase);
+          const image = await uploadImage(gallery, supabase, "products");
 
           return {
             ...image,
@@ -280,7 +284,7 @@ export default async function handler(
     try {
       const documents = await Promise.all(
         newDocuments.map(async (document: FormidableFile) => {
-          const doc = await uploadFile(document, supabase);
+          const doc = await uploadFile(document, supabase, "products");
 
           return {
             ...doc,

@@ -8,3 +8,6 @@ export { default as CMSTextInput } from "./CMSTextInput";
 export { default as CMSDropdown } from "./CMSDropdown";
 export { default as CMSTextArea } from "./CMSTextArea";
 export { default as EmptyState } from "./EmptyState";
+export { default as CMSDocumentInput } from "./CMSDocumentInput";
+export { default as CMSGalleryInput } from "./CMSGalleryInput";
+export { default as CMSDescriptionInput } from "./CMSDescriptionInput";

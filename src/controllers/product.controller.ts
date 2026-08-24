@@ -8,7 +8,7 @@ import {
 } from "@/interfaces/label.interface";
 import { TableType } from "@/interfaces/page.interface";
 import { ProductInput } from "@/interfaces/product.interface";
-import { getLabelDropdown } from "@/services/label.service";
+import { getDropdown } from "@/services/util.service";
 import {
   createProduct,
   deleteProduct,
@@ -39,22 +39,22 @@ const useProductController = () => {
       queries: [
         {
           queryKey: ["getCategoriesDropdown"],
-          queryFn: () => getLabelDropdown("categories"),
+          queryFn: () => getDropdown("categories"),
           refetchOnMount: "always",
         },
         {
           queryKey: ["getIndustriesDropdown"],
-          queryFn: () => getLabelDropdown("industries"),
+          queryFn: () => getDropdown("industries"),
           refetchOnMount: "always",
         },
         {
           queryKey: ["getApplicationsDropdown"],
-          queryFn: () => getLabelDropdown("applications"),
+          queryFn: () => getDropdown("applications"),
           refetchOnMount: "always",
         },
         {
           queryKey: ["getDivisionsDropdown"],
-          queryFn: () => getLabelDropdown("divisions"),
+          queryFn: () => getDropdown("divisions"),
           refetchOnMount: "always",
         },
       ],
@@ -242,7 +242,6 @@ const useProductController = () => {
     const { data, isLoading, isError, error } = useQuery({
       queryKey: ["getProductById", id],
       queryFn: () => getProductById(id),
-      refetchOnMount: "always",
     });
 
     let finalData: ProductInput = {

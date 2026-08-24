@@ -1,7 +1,11 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import { SupabaseClient } from "@supabase/supabase-js";
 import sharp from "sharp";
 import fs from "fs/promises";
 import type { File as FormidableFile } from "formidable";
+import { randomUUID } from "crypto";
+import logger from "./logger";
+import pino from "pino";
 
 export const getImageDimensions = async (file: FormidableFile) => {
   const buffer = await fs.readFile(file.filepath);
@@ -25,6 +29,7 @@ export const getFilePath = (url: string) => {
 export const uploadImage = async (
   file: FormidableFile,
   supabase: SupabaseClient<any, "public", "public", any, any>,
+  storage: string,
 ) => {
   const { width, height } = await getImageDimensions(file);
 
@@ -37,7 +42,7 @@ export const uploadImage = async (
   const filePath = `galleries/${fileName}`;
 
   const { data, error } = await supabase.storage
-    .from("products")
+    .from(storage)
     .upload(filePath, buffer, {
       cacheControl: "3600",
       upsert: false,
@@ -49,7 +54,7 @@ export const uploadImage = async (
   }
 
   const { data: urlData } = supabase.storage
-    .from("products")
+    .from(storage)
     .getPublicUrl(data.path);
 
   return {
@@ -62,6 +67,7 @@ export const uploadImage = async (
 export const uploadFile = async (
   file: FormidableFile,
   supabase: SupabaseClient<any, "public", "public", any, any>,
+  storage: string,
 ) => {
   const buffer = await fs.readFile(file.filepath);
 
@@ -72,7 +78,7 @@ export const uploadFile = async (
   const filePath = `documents/${fileName}`;
 
   const { data, error } = await supabase.storage
-    .from("products")
+    .from(storage)
     .upload(filePath, buffer, {
       cacheControl: "3600",
       upsert: false,
@@ -84,11 +90,94 @@ export const uploadFile = async (
   }
 
   const { data: urlData } = supabase.storage
-    .from("products")
+    .from(storage)
     .getPublicUrl(data.path);
 
   return {
     doc_url: urlData.publicUrl,
     doc_name: fileName,
   };
+};
+
+export const initiateLogger = (req: NextApiRequest) => {
+  const requestId = randomUUID();
+
+  const log = logger.child({
+    requestId,
+    method: req.method,
+    path: req.url,
+  });
+
+  const startedAt = Date.now();
+
+  log.info("Request started");
+
+  return {
+    log,
+    startedAt,
+  };
+};
+
+export const methodNotAllowedError = (
+  res: NextApiResponse,
+  log: pino.Logger<never, boolean>,
+) => {
+  const json = {
+    success: false,
+    message: "Method not allowed",
+    data: {},
+  };
+
+  log.warn({
+    status: 405,
+    message: "Method not allowed",
+    data: json,
+  });
+
+  return res.status(405).json(json);
+};
+
+export const errorHandler = (
+  res: NextApiResponse,
+  log: pino.Logger<never, boolean>,
+  error: any,
+  code?: string,
+) => {
+  const json = {
+    success: false,
+    data: error,
+  };
+
+  if (code) {
+    if (code === "42501") {
+      const finalJson = {
+        ...json,
+        message: "You don't have access!",
+      };
+
+      log.warn({
+        status: 403,
+        message: error.message,
+        response: finalJson,
+      });
+
+      return res.status(403).json(finalJson);
+    }
+
+    return;
+  }
+
+  const finalJson = {
+    ...json,
+    message: "Something went wrong!",
+    data: {},
+  };
+
+  log.warn({
+    status: 500,
+    message: JSON.stringify(error),
+    response: finalJson,
+  });
+
+  return res.status(500).json(finalJson);
 };

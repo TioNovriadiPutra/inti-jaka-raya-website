@@ -44,6 +44,7 @@ export default async function handler(
 
     const supabase = createSupabaseClient(req, res);
 
+    // Add Case Study
     const { data, error } = await supabase
       .from("products")
       .insert({
@@ -65,8 +66,9 @@ export default async function handler(
       });
     }
 
+    // Add Thumbnail
     try {
-      const image = await uploadImage(thumbnail, supabase);
+      const image = await uploadImage(thumbnail, supabase, "products");
 
       const { error: productGalleryError } = await supabase
         .from("product_galleries")
@@ -87,10 +89,11 @@ export default async function handler(
       });
     }
 
+    // Add Gallery
     try {
       const images = await Promise.all(
         galleries.map(async (gallery: FormidableFile) => {
-          const image = await uploadImage(gallery, supabase);
+          const image = await uploadImage(gallery, supabase, "products");
 
           return {
             ...image,
@@ -116,10 +119,11 @@ export default async function handler(
       });
     }
 
+    // Add Document
     try {
       const docs = await Promise.all(
         documents.map(async (document: FormidableFile) => {
-          const doc = await uploadFile(document, supabase);
+          const doc = await uploadFile(document, supabase, "products");
 
           return {
             ...doc,
@@ -144,6 +148,7 @@ export default async function handler(
       });
     }
 
+    // Add Description
     descriptions.forEach(async (desc: ProductSectionInput) => {
       const { error } = await supabase.from("product_descriptions").insert({
         title: desc.title,
