@@ -21,55 +21,67 @@ const CMSEditCaseStudy = () => {
 
   const { id } = route.query;
 
-  const { control, handleSubmit, setValue, setValues } =
-    useForm<CaseStudyInput>({
-      defaultValues: {
-        title: "",
-        product: undefined,
-        category: undefined,
-        industry: undefined,
-        application: undefined,
-        division: undefined,
-        problem: "",
-        thumbnail: undefined,
-        galleries: [],
-        documents: [],
-        descriptions: [
-          {
-            title: "",
-            description: "",
-          },
-        ],
-      },
-    });
+  const { control, handleSubmit, reset } = useForm<CaseStudyInput>({
+    defaultValues: {
+      title: "",
+      product: undefined,
+      category: undefined,
+      industry: undefined,
+      application: undefined,
+      division: undefined,
+      problem: "",
+      thumbnail: undefined,
+      galleries: [],
+      documents: [],
+      descriptions: [
+        {
+          title: "",
+          description: "",
+        },
+      ],
+    },
+  });
 
   const fieldArray = useFieldArray({
     control,
     name: "descriptions",
   });
 
-  const { useGetCreateCaseStudyDropdownService, useGetCaseStudyByIdService } =
-    useCaseStudyController();
+  const {
+    useGetCreateCaseStudyDropdownService,
+    useGetCaseStudyByIdService,
+    updateCaseStudyService,
+  } = useCaseStudyController();
 
   const { finalData: dropdownData, isLoading: dropdownLoading } =
     useGetCreateCaseStudyDropdownService();
 
-  const { finalData: caseStudyData, isLoading: caseStudyLoading } =
-    useGetCaseStudyByIdService(Number(id));
+  const {
+    finalData: caseStudyData,
+    isRefetching,
+    isLoading: caseStudyLoading,
+  } = useGetCaseStudyByIdService(Number(id));
 
   useEffect(() => {
-    if (!caseStudyLoading) {
-      setValues(caseStudyData);
-      setValue("descriptions", []);
-      caseStudyData.descriptions.forEach((item) => fieldArray.append(item));
+    if (!caseStudyLoading && !isRefetching) {
+      reset({
+        ...caseStudyData,
+      });
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+      });
     }
-  }, [caseStudyLoading]);
+  }, [caseStudyLoading, isRefetching]);
 
   return (
     <CMSFormContainer
       title="Edit Case Study"
       fetchLoading={caseStudyLoading}
-      onSubmit={handleSubmit((data) => console.log(data))}
+      onSubmit={handleSubmit((data) =>
+        updateCaseStudyService({ id: Number(id), body: data }),
+      )}
     >
       <Flex className="bg-white border border-neutral-200 rounded-lg mb-2">
         <Flex className="p-6">

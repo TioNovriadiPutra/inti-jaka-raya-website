@@ -11,15 +11,24 @@ import { TableType } from "@/interfaces/page.interface";
 import { ProductDTO } from "@/interfaces/product.interface";
 import {
   createCaseStudy,
+  deleteCaseStudy,
   getCaseStudies,
   getCaseStudyById,
+  updateCaseStudy,
+  updateCaseStudyStatus,
 } from "@/services/caseStudy.service";
 import { getDropdown } from "@/services/util.service";
-import { useCaseStudyFilter } from "@/stores/page.store";
+import {
+  useCaseStudyFilter,
+  useDeleteModal,
+  useLoading,
+} from "@/stores/page.store";
 import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
 const useCaseStudyController = () => {
+  const isLoading = useLoading((state) => state.isLoading);
+  const setDeleteModal = useDeleteModal((state) => state.setShowModal);
   const caseStudyFilter = useCaseStudyFilter((state) => state.filter);
 
   const route = useRouter();
@@ -135,8 +144,47 @@ const useCaseStudyController = () => {
     onError: (error) => onError(error.message),
   });
 
+  const deleteCaseStudyMutation = useMutation({
+    mutationKey: ["deleteCaseStudy"],
+    mutationFn: (id: number) => deleteCaseStudy(id),
+    onMutate,
+    onSettled,
+    onSuccess: async (response) => {
+      setDeleteModal(false, "", undefined);
+      await queryClient.invalidateQueries({
+        queryKey: ["getCaseStudies"],
+      });
+      onSuccess(response.message);
+    },
+    onError: (error) => onError(error.message),
+  });
+
+  const updateCaseStudyStatusMutation = useMutation({
+    mutationKey: ["updateCaseStudyStatus"],
+    mutationFn: (data: { id: number; closeMenu: () => void }) =>
+      updateCaseStudyStatus(data.id),
+    onMutate,
+    onSettled: (data, error, variables) => {
+      variables.closeMenu();
+      onSettled();
+    },
+    onSuccess: async (response) => {
+      await queryClient
+        .invalidateQueries({
+          queryKey: ["getCaseStudies"],
+        })
+        .then(() => onSuccess(response.message));
+    },
+    onError: (error) => onError(error.message),
+  });
+
   const useGetCaseStudiesService = (page: number, onClose: () => void) => {
-    const { data, isLoading, isError, error } = useQuery({
+    const {
+      data,
+      isLoading: isLoadingQuery,
+      isError,
+      error,
+    } = useQuery({
       queryKey: ["getCaseStudies", page, caseStudyFilter.value],
       queryFn: () => getCaseStudies(page, caseStudyFilter.value),
     });
@@ -150,7 +198,7 @@ const useCaseStudyController = () => {
       },
     };
 
-    if (!isLoading) {
+    if (!isLoadingQuery) {
       if (isError) {
         onError(error.message);
       } else if (data) {
@@ -166,19 +214,28 @@ const useCaseStudyController = () => {
                 label: "Edit",
                 onClick: () => {
                   onClose();
+                  queryClient.invalidateQueries({
+                    queryKey: ["getCaseStudyById", item.id],
+                  });
                   route.push(`/cms/case-studies/edit/${item.id}`);
                 },
               },
               {
                 label: item.is_showing ? "Hide" : "Show",
-                onClick: () => console.log("edit"),
+                onClick: () =>
+                  updateCaseStudyStatusMutation.mutate({
+                    id: item.id,
+                    closeMenu: onClose,
+                  }),
                 isLoading,
               },
               {
                 label: "Delete",
                 onClick: () => {
                   onClose();
-                  console.log("delete");
+                  setDeleteModal(true, item.title, () =>
+                    deleteCaseStudyMutation.mutate(item.id),
+                  );
                 },
               },
             ],
@@ -194,14 +251,15 @@ const useCaseStudyController = () => {
 
     return {
       finalData,
-      isLoading,
+      isLoading: isLoadingQuery,
     };
   };
 
   const useGetCaseStudyByIdService = (id: number) => {
-    const { data, isLoading, isError, error } = useQuery({
+    const { data, isLoading, isRefetching, isError, error } = useQuery({
       queryKey: ["getCaseStudyById", id],
       queryFn: () => getCaseStudyById(id),
+      refetchOnWindowFocus: "always",
     });
 
     let finalData: CaseStudyInput = {
@@ -271,14 +329,33 @@ const useCaseStudyController = () => {
     return {
       finalData,
       isLoading,
+      isRefetching,
     };
   };
+
+  const updateCaseStudyMutation = useMutation({
+    mutationKey: ["updateCaseStudy"],
+    mutationFn: (data: { id: number; body: CaseStudyInput }) =>
+      updateCaseStudy(data.id, data.body),
+    onMutate,
+    onSettled,
+    onSuccess: async (response) => {
+      route.push("/cms/case-studies");
+      await queryClient.invalidateQueries({
+        queryKey: ["getCaseStudies"],
+      });
+      onSuccess(response.message);
+    },
+    onError: (error) => onError(error.message),
+  });
 
   return {
     useGetCreateCaseStudyDropdownService,
     createCaseStudyService: (body: any) => createCaseStudyMutation.mutate(body),
     useGetCaseStudiesService,
     useGetCaseStudyByIdService,
+    updateCaseStudyService: (data: { id: number; body: any }) =>
+      updateCaseStudyMutation.mutate(data),
   };
 };
 
