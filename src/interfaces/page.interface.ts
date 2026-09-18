@@ -15,3 +15,11 @@ export interface TableType {
   data: TableDataType[];
   metaData: Omit<MetaType, "limit">;
 }
+
+export interface CatalogCardType {
+  image: string;
+  tag: string;
+  title: string;
+  width: number;
+  height: number;
+}

@@ -320,6 +320,110 @@ const useProductController = () => {
     onError: (error) => onError(error.message),
   });
 
+  const useGetProductFilterDropdown = () => {
+    const responses = useQueries({
+      queries: [
+        {
+          queryKey: ["getCategoriesDropdown"],
+          queryFn: () => getDropdown("categories"),
+          refetchOnMount: "always",
+        },
+        {
+          queryKey: ["getIndustriesDropdown"],
+          queryFn: () => getDropdown("industries"),
+          refetchOnMount: "always",
+        },
+        {
+          queryKey: ["getApplicationsDropdown"],
+          queryFn: () => getDropdown("applications"),
+          refetchOnMount: "always",
+        },
+        {
+          queryKey: ["getDivisionsDropdown"],
+          queryFn: () => getDropdown("divisions"),
+          refetchOnMount: "always",
+        },
+      ],
+    });
+
+    const isLoading = responses.some((res) => res.isLoading);
+    const isError = responses.some((res) => res.isError);
+    const error = responses.find((res) => res.error !== undefined);
+
+    let finalData: { title: string; data: DropdownType[] }[] = [
+      {
+        title: "Category",
+        data: [],
+      },
+      {
+        title: "Industry",
+        data: [],
+      },
+      {
+        title: "Application",
+        data: [],
+      },
+      {
+        title: "Division",
+        data: [],
+      },
+    ];
+
+    if (!isLoading) {
+      if (isError) {
+        onError(error?.error?.message ?? "");
+      } else {
+        finalData = [
+          {
+            title: "Category",
+            data: (responses[0].data?.data as CategoryDTO[]).map(
+              (item) =>
+                ({
+                  label: item.category_name,
+                  value: String(item.id),
+                }) as DropdownType,
+            ),
+          },
+          {
+            title: "Industry",
+            data: (responses[1].data?.data as IndustryDTO[]).map(
+              (item) =>
+                ({
+                  label: item.industry_name,
+                  value: String(item.id),
+                }) as DropdownType,
+            ),
+          },
+          {
+            title: "Application",
+            data: (responses[2].data?.data as ApplicationDTO[]).map(
+              (item) =>
+                ({
+                  label: item.application_name,
+                  value: String(item.id),
+                }) as DropdownType,
+            ),
+          },
+          {
+            title: "Division",
+            data: (responses[3].data?.data as DivisionDTO[]).map(
+              (item) =>
+                ({
+                  label: item.division_name,
+                  value: String(item.id),
+                }) as DropdownType,
+            ),
+          },
+        ];
+      }
+    }
+
+    return {
+      finalData,
+      isLoading,
+    };
+  };
+
   return {
     useGetCreateProductDropdown,
     createProductService: (body: any) => createProductMutation.mutate(body),
@@ -327,6 +431,7 @@ const useProductController = () => {
     useGetProductByIdService,
     updateProductService: (data: { id: number; body: any }) =>
       updateProductMutation.mutate(data),
+    useGetProductFilterDropdown,
   };
 };
 

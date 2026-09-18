@@ -111,25 +111,6 @@ export const aboutSection2Data = [
   },
 ];
 
-export const filterData: { title: string; data: string[] }[] = [
-  {
-    title: "Category",
-    data: [],
-  },
-  {
-    title: "Industry",
-    data: [],
-  },
-  {
-    title: "Application",
-    data: [],
-  },
-  {
-    title: "Division",
-    data: [],
-  },
-];
-
 export const dummyData = [
   {
     image: "/images/products.png",
