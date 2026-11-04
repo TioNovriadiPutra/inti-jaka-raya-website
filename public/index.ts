@@ -1,13 +1,7 @@
-export { default as LogoFull } from "./logoFull.svg";
-export { default as UPSLogo } from "./ups.svg";
 export { default as TimeIcon } from "./time.svg";
 export { default as ShieldIcon } from "./shield.svg";
 export { default as TemperatureIcon } from "./temperature.svg";
 export { default as CheckIcon } from "./check.svg";
-export { default as FacebookIcon } from "./facebook.svg";
-export { default as TwitterIcon } from "./twitter.svg";
-export { default as InstagramIcon } from "./instagram.svg";
-export { default as DotText } from "./dot.svg";
 export { default as ArrowRight } from "./arrowRight.svg";
 export { default as ChartIcon } from "./chart.svg";
 export { default as HandshakeIcon } from "./handshake.svg";

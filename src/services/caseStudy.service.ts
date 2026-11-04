@@ -1,4 +1,5 @@
 import {
+  CaseStudyCarouselDTO,
   CaseStudyDetailDTO,
   CaseStudyDTO,
   CaseStudyInput,
@@ -64,6 +65,18 @@ export const getCaseStudyById = async (
 ): Promise<ResType<CaseStudyDetailDTO>> => {
   try {
     const response = await axiosInstance.get(`/case-study/detail/${id}`);
+
+    return response.data;
+  } catch (error) {
+    throw errorResponse(error);
+  }
+};
+
+export const getCaseStudyCarousel = async (): Promise<
+  ResType<CaseStudyCarouselDTO[]>
+> => {
+  try {
+    const response = await axiosInstance.get("/carousel");
 
     return response.data;
   } catch (error) {

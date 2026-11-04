@@ -5,7 +5,7 @@ export interface LabelInput {
   labelType?: DropdownType;
 }
 
-export interface LabelDTO {
+interface LabelDTO {
   id: number;
   created_at: string;
 }

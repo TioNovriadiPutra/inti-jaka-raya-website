@@ -79,7 +79,24 @@ export interface ProductDetailDTO {
   descriptions: ProductDescriptionDTO[];
 }
 
-export interface ProductDTO {
+export interface ProductPublicDetailDTO {
   id: number;
+  product_code: string;
   product_name: string;
+  galleries: ProductGalleryDTO[];
+  documents: ProductDocumentDTO[];
+  descriptions: ProductDescriptionDTO[];
+  case_studies: { id: number; title: string; problem: string }[];
 }
+
+export interface ProductDetailPageType {
+  id: number;
+  code: string;
+  title: string;
+  thumbnail?: ProductGalleryDTO;
+  galleries: ProductGalleryDTO[];
+  documents: ProductDocumentDTO[];
+  descriptions: ProductDescriptionDTO[];
+  caseStudies: ProductPublicDetailDTO["case_studies"];
+}
+

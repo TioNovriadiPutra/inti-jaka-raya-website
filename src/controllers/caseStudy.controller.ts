@@ -7,13 +7,14 @@ import {
   DivisionDTO,
   IndustryDTO,
 } from "@/interfaces/label.interface";
-import { TableType } from "@/interfaces/page.interface";
+import { CaseStudyCarouselCardType, TableType } from "@/interfaces/page.interface";
 import { ProductDTO } from "@/interfaces/product.interface";
 import {
   createCaseStudy,
   deleteCaseStudy,
   getCaseStudies,
   getCaseStudyById,
+  getCaseStudyCarousel,
   updateCaseStudy,
   updateCaseStudyStatus,
 } from "@/services/caseStudy.service";
@@ -25,6 +26,7 @@ import {
 } from "@/stores/page.store";
 import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { useMemo } from "react";
 
 const useCaseStudyController = () => {
   const isLoading = useLoading((state) => state.isLoading);
@@ -34,6 +36,33 @@ const useCaseStudyController = () => {
   const route = useRouter();
 
   const { queryClient, onMutate, onSettled, onError, onSuccess } = useHelper();
+
+  const useGetCaseStudyCarouselService = () => {
+    const { data, isLoading, isError, error, refetch } = useQuery({
+      queryKey: ["getCaseStudyCarousel"],
+      queryFn: () => getCaseStudyCarousel(),
+    });
+
+    const finalData = useMemo<CaseStudyCarouselCardType[]>(
+      () =>
+        (data?.data ?? []).map((item) => {
+          const thumbnail = item.thumbnail[0];
+
+          return {
+            id: item.id,
+            subTitle: item.category?.category_name ?? "",
+            title: item.title,
+            description: item.problem,
+            image: thumbnail?.image_url || "/images/carousel.jpg",
+            width: thumbnail?.ori_width > 0 ? thumbnail.ori_width : 742,
+            height: thumbnail?.ori_height > 0 ? thumbnail.ori_height : 928,
+          };
+        }),
+      [data],
+    );
+
+    return { finalData, isLoading, isError, error, refetch };
+  };
 
   const useGetCreateCaseStudyDropdownService = () => {
     const responses = useQueries({
@@ -164,7 +193,7 @@ const useCaseStudyController = () => {
     mutationFn: (data: { id: number; closeMenu: () => void }) =>
       updateCaseStudyStatus(data.id),
     onMutate,
-    onSettled: (data, error, variables) => {
+    onSettled: (_data, _error, variables) => {
       variables.closeMenu();
       onSettled();
     },
@@ -350,6 +379,7 @@ const useCaseStudyController = () => {
   });
 
   return {
+    useGetCaseStudyCarouselService,
     useGetCreateCaseStudyDropdownService,
     createCaseStudyService: (body: any) => createCaseStudyMutation.mutate(body),
     useGetCaseStudiesService,

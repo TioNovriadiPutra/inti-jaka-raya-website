@@ -7,7 +7,7 @@ import { randomUUID } from "crypto";
 import logger from "./logger";
 import pino from "pino";
 
-export const getImageDimensions = async (file: FormidableFile) => {
+const getImageDimensions = async (file: FormidableFile) => {
   const buffer = await fs.readFile(file.filepath);
 
   const metadata = await sharp(buffer).metadata();
@@ -108,13 +108,10 @@ export const initiateLogger = (req: NextApiRequest) => {
     path: req.url,
   });
 
-  const startedAt = Date.now();
-
   log.info("Request started");
 
   return {
     log,
-    startedAt,
   };
 };
 
@@ -148,23 +145,19 @@ export const errorHandler = (
     data: error,
   };
 
-  if (code) {
-    if (code === "42501") {
-      const finalJson = {
-        ...json,
-        message: "You don't have access!",
-      };
+  if (code === "42501") {
+    const finalJson = {
+      ...json,
+      message: "You don't have access!",
+    };
 
-      log.warn({
-        status: 403,
-        message: error.message,
-        response: finalJson,
-      });
+    log.warn({
+      status: 403,
+      message: error.message,
+      response: finalJson,
+    });
 
-      return res.status(403).json(finalJson);
-    }
-
-    return;
+    return res.status(403).json(finalJson);
   }
 
   const finalJson = {

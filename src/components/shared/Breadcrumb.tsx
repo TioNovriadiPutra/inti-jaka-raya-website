@@ -1,3 +1,4 @@
+import useTranslation from "@/hooks/useTranslation";
 import { ArrowRight, ArrowRightDark } from "../../../public";
 import Flex from "./Flex";
 import { motion, type Variants } from "motion/react";
@@ -35,6 +36,7 @@ type Props = {
 };
 
 const Breadcrumb = ({ pages, color = "light", animated = false }: Props) => {
+  const { t } = useTranslation();
   return (
     <MotionFlex
       className={`flex-row! items-center px-3.5 py-3 ${color === "dark" ? "bg-neutral-100" : "bg-[rgba(245,245,245,0.3)]"} rounded-lg self-start gap-5`}
@@ -52,7 +54,7 @@ const Breadcrumb = ({ pages, color = "light", animated = false }: Props) => {
             className={`text-body-s ${color === "dark" ? "text-neutral-400" : "text-white"}`}
             variants={animated ? breadcrumbItemReveal : undefined}
           >
-            {page}
+            {t(page)}
           </motion.p>
 
           {index < pages.length - 1 &&

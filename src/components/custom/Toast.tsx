@@ -35,7 +35,7 @@ const Toast = () => {
             y: "100%",
             opacity: 0,
           }}
-          className="flex items-center justify-between gap-6 absolute z-999 bottom-10.25 left-1/2 transform -translate-x-1/2 bg-white min-w-90 px-6 py-3.5 rounded-[14px] shadow-sm"
+          className="flex items-center justify-between gap-6 absolute z-[1001] bottom-10.25 left-1/2 transform -translate-x-1/2 bg-white min-w-90 px-6 py-3.5 rounded-[14px] shadow-sm"
         >
           {toast.type === "success" ? <SuccessIcon /> : <ErrorIcon />}
 

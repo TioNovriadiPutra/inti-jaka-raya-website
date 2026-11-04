@@ -1,12 +1,12 @@
 import { MetaType } from "./res.interface";
 
-export interface TableActionType {
+interface TableActionType {
   label: string;
   onClick: () => void;
   isLoading?: boolean;
 }
 
-export interface TableDataType {
+interface TableDataType {
   row: string[];
   actions?: TableActionType[];
 }
@@ -17,9 +17,20 @@ export interface TableType {
 }
 
 export interface CatalogCardType {
+  id: number;
   image: string;
   tag: string;
   title: string;
+  width: number;
+  height: number;
+}
+
+export interface CaseStudyCarouselCardType {
+  id: number;
+  subTitle: string;
+  title: string;
+  description: string;
+  image: string;
   width: number;
   height: number;
 }

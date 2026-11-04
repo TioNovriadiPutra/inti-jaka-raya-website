@@ -24,7 +24,7 @@ export interface CaseStudyInput {
   descriptions: ProductSectionInput[];
 }
 
-export interface CaseStudyIndustryDTO {
+interface CaseStudyIndustryDTO {
   id: number;
   industry_name: string;
 }
@@ -36,9 +36,20 @@ export interface CaseStudyDTO {
   is_showing: boolean;
 }
 
-export interface CaseStudyProductDTO {
+interface CaseStudyProductDTO {
   id: number;
   product_name: string;
+}
+
+export interface CaseStudyCarouselDTO {
+  id: number;
+  title: string;
+  problem: string;
+  category: ProductCategoryDTO | null;
+  thumbnail: Pick<
+    ProductGalleryDTO,
+    "image_url" | "ori_width" | "ori_height"
+  >[];
 }
 
 export interface CaseStudyDetailDTO {

@@ -1,3 +1,6 @@
+import useTranslation from "@/hooks/useTranslation";
+import Reveal from "@/components/shared/Reveal";
+import { catalogStyles as styles } from "@/styles/ui";
 import { Breadcrumb, DropdownModal, Flex } from "@/components/shared";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { ArrowDown, SearchIcon } from "../../../public";
@@ -18,6 +21,7 @@ type FormValues = {
 };
 
 const Products = () => {
+  const { t } = useTranslation();
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [isContentTypeOpen, setIsContentTypeOpen] = useState(false);
   const contentTypeDropdownRef = useRef<HTMLDivElement>(null);
@@ -88,21 +92,17 @@ const Products = () => {
   };
 
   const filterActions = (
-    <div className="flex shrink-0 gap-2 border-t border-neutral-200 p-2">
+    <div className={styles.filterActions}>
       <button
         type="button"
-        className="flex-1 rounded-3xl border border-neutral-200 px-4 py-3 text-body-s font-semibold text-neutral-600"
+        className={styles.cancelButton}
         onClick={closeFilter}
-      >
-        Cancel
-      </button>
+      >{t("Cancel")}</button>
       <button
         type="button"
-        className="flex-1 rounded-3xl bg-accent-600 px-4 py-3 text-body-s font-semibold text-white"
+        className={styles.applyButton}
         onClick={applyFilters}
-      >
-        Apply
-      </button>
+      >{t("Apply")}</button>
     </div>
   );
 
@@ -140,53 +140,54 @@ const Products = () => {
   }, [isContentTypeOpen]);
 
   return (
-    <Flex className="grow basis-0 bg-white">
+    <main className={styles.page}>
       {/* Section 1 */}
-      <Flex className="px-3.5 md:px-15 py-6">
+      <Flex className={styles.breadcrumb}>
         <Breadcrumb pages={["Home", "Products"]} color="dark" />
       </Flex>
 
       {/* Section 2 */}
-      <Flex className="px-3.5 md:px-15 pt-3.5 pb-16 gap-10">
-        <h3 className="font-medium text-neutral-800 text-center">
-          Discover the Perfect <br className="hidden md:flex" />
-          <span className="font-bold text-neutral-400">
-            Solution for Your Needs.
-          </span>
-        </h3>
+      <Flex className={styles.container}>
+        <Reveal as="header" className={styles.header}>
+          <p className={styles.eyebrow}><span />{t("Catalog")}</p>
+          <h1 className={styles.heading}>{t("Discover the Perfect")}{" "}<br className="hidden md:flex" />
+          <span className={styles.headingAccent}>{t("Solution for Your Needs.")}</span>
+        </h1>
+          <p className={styles.intro}>{t("Explore repair materials, protective coatings and industrial case studies.")}</p>
+        </Reveal>
 
-        <Flex className="gap-6">
-          <Flex className="flex-row! items-center px-6 py-3 border border-neutral-200 rounded-3xl md:w-109 md:self-center lg:mb-10">
+        <Flex className={styles.catalog}>
+          <Flex className={styles.search}>
             <Controller
               control={control}
               name="search"
               render={({ field }) => (
                 <input
                   {...field}
-                  placeholder="Search here..."
-                  className="flex-1 text-body-xs text-neutral-600 outline-none"
+                  aria-label={t("Search")} placeholder={t("Search here...")}
+                  className={styles.searchInput}
                 />
               )}
             />
 
-            <button type="button">
+            <span className={styles.searchIcon} aria-hidden="true">
               <SearchIcon />
-            </button>
+            </span>
           </Flex>
 
-          <Flex className="gap-3.5 md:gap-6 lg:flex-row!">
-            <Flex className="flex-row! gap-3.5 overflow-x-auto lg:overflow-x-visible overflow-y-visible lg:flex-1">
+          <Flex className={styles.toolbar}>
+            <Flex className={styles.filters}>
               {filterData.map((filter, index) => {
                 const isOpen = openDropdown === index;
 
                 return (
                   <Flex
                     key={filter.title}
-                    className="relative shrink-0 overflow-x-visible"
+                    className={styles.filter}
                   >
                     <button
                       type="button"
-                      className="flex shrink-0 items-center px-4.5 py-3 border border-neutral-200 rounded-3xl gap-2"
+                      className={styles.filterButton}
                       disabled={filterLoading}
                       aria-expanded={isOpen}
                       onClick={() => {
@@ -209,15 +210,15 @@ const Products = () => {
                           color="var(--neutral-900)"
                         />
                       ) : (
-                        <p className="text-body-s font-semibold text-neutral-800">
-                          {filter.title}
+                        <p className={styles.filterLabel}>
+                          {t(filter.title)}
                         </p>
                       )}
 
                       <Flex className="flex-row! items-center">
                         {selectedFilters[filter.title].length > 0 && (
                           <span>
-                            <Flex className="bg-accent-400 size-6 rounded-full items-center justify-center">
+                            <Flex className={styles.filterCount}>
                               <p className="text-body-xs text-white">
                                 {selectedFilters[filter.title].length}
                               </p>
@@ -235,8 +236,8 @@ const Products = () => {
 
                     <AnimatePresence>
                       {isOpen && (
-                        <motion.div className="hidden lg:flex flex-col absolute z-999 min-w-64 max-w-90 max-h-112.5 bg-white p-2 rounded-[14px] border border-neutral-200 top-[calc(100%+14px)]">
-                          <Flex className="flex-row! items-center px-2.5 py-3.25 border-b border-b-neutral-200 gap-4">
+                        <motion.div className={"hidden lg:flex " + styles.popover} initial={{ opacity: 0, y: 8, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 4, scale: 0.98 }} transition={{ duration: 0.18, ease: "easeOut" }}>
+                          <Flex className={styles.popoverSearch}>
                             <SearchIcon />
 
                             <Controller
@@ -248,16 +249,16 @@ const Products = () => {
                                   type="search"
                                   placeholder={
                                     activeFilter
-                                      ? `Search ${activeFilter.title.toLowerCase()}...`
-                                      : "Search here..."
+                                      ? `${t("Search")} ${t(activeFilter.title).toLowerCase()}...`
+                                      : t("Search here...")
                                   }
-                                  className="min-w-0 flex-1 text-body-s text-neutral-600 outline-none"
+                                  className={styles.popoverInput}
                                 />
                               )}
                             />
                           </Flex>
 
-                          <Flex className="overflow-y-auto">
+                          <Flex className={styles.options}>
                             {filteredData.map((option, index) => {
                               const isSelected = activeFilter
                                 ? draftFilters[activeFilter.title].some(
@@ -269,7 +270,7 @@ const Products = () => {
                                 <button
                                   key={index.toString()}
                                   type="button"
-                                  className="flex px-2.5 py-3 text-left text-body-s gap-2.5 items-center"
+                                  className={styles.option}
                                   onClick={() => {
                                     setDraftFilters((prev) => {
                                       if (isSelected) {
@@ -300,7 +301,7 @@ const Products = () => {
                                       variant="Bold"
                                     />
                                   ) : (
-                                    <Flex className="size-6 bg-neutral-200 rounded-lg" />
+                                    <Flex className={styles.checkbox} />
                                   )}
 
                                   {option.label}
@@ -311,8 +312,8 @@ const Products = () => {
                             {activeFilter && filteredData.length === 0 && (
                               <p className="px-2.5 py-3 text-body-xs text-neutral-400">
                                 {activeFilter.data.length === 0
-                                  ? "No options available"
-                                  : "No matching options"}
+                                  ? t("No options available")
+                                  : t("No matching options")}
                               </p>
                             )}
                           </Flex>
@@ -325,29 +326,27 @@ const Products = () => {
               })}
             </Flex>
 
-            <Flex className="flex-row! items-center justify-end gap-3.5">
-              <Flex className="items-end">
-                <p className="text-body-xs text-neutral-400">Showing</p>
+            <Flex className={styles.resultsTools}>
+              <Flex className={styles.resultCount}>
+                <p className="text-body-xs text-neutral-400">{t("Showing")}</p>
 
-                <p className="text-body-xs font-semibold text-neutral-800">
-                  120 Items
-                </p>
+                <p className="text-body-xs font-semibold text-neutral-800">{catalogLoading ? "—" : catalogData.length} {t("Items")}</p>
               </Flex>
 
-              <Flex className="w-px h-full bg-neutral-200" />
+              <Flex className={styles.toolDivider} />
 
-              <Flex ref={contentTypeDropdownRef} className="relative shrink-0">
+              <Flex ref={contentTypeDropdownRef} className={styles.contentType}>
                 <button
                   type="button"
-                  className="flex shrink-0 items-center px-4.5 py-3 border border-neutral-200 rounded-3xl gap-2"
+                  className={styles.filterButton}
                   aria-expanded={isContentTypeOpen}
                   onClick={() => {
                     closeFilter();
                     setIsContentTypeOpen((currentState) => !currentState);
                   }}
                 >
-                  <p className="text-body-s font-semibold text-neutral-800">
-                    {contentType}
+                  <p className={styles.filterLabel}>
+                    {t(contentType)}
                   </p>
 
                   <span
@@ -358,15 +357,15 @@ const Products = () => {
                 </button>
 
                 {isContentTypeOpen && (
-                  <Flex className="absolute z-50 top-full right-0 mt-2 min-w-44 p-2 bg-white border border-neutral-200 rounded-[14px] shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+                  <Flex className={styles.typeMenu}>
                     {(["Products", "Case Studies"] as const).map((option) => (
                       <button
                         key={option}
                         type="button"
-                        className={`flex px-2.5 py-3 text-left text-body-s rounded-lg ${
+                        className={`${styles.typeOption} ${
                           contentType === option
-                            ? "bg-accent-50 text-accent-600"
-                            : "text-neutral-600"
+                            ? styles.selectedType
+                            : styles.unselectedType
                         }`}
                         onClick={() => {
                           if (option !== contentType) {
@@ -390,7 +389,7 @@ const Products = () => {
                           setIsContentTypeOpen(false);
                         }}
                       >
-                        {option}
+                        {t(option)}
                       </button>
                     ))}
                   </Flex>
@@ -399,20 +398,16 @@ const Products = () => {
             </Flex>
           </Flex>
 
-          <Flex className="h-px bg-neutral-200" />
+          <Flex className={styles.divider} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className={styles.grid}>
             {!catalogLoading && catalogData.length === 0 && (
               <div
                 role="status"
-                className="col-span-full flex flex-col items-center justify-center gap-2 rounded-lg bg-neutral-50 px-6 py-16 text-center"
+                className={styles.empty}
               >
-                <p className="text-body-s font-semibold text-neutral-600">
-                  No {contentType.toLowerCase()} found
-                </p>
-                <p className="text-body-xs text-neutral-400">
-                  There are no items to display at the moment.
-                </p>
+                <p className="text-body-s font-semibold text-neutral-600">{t(`No ${contentType.toLowerCase()} found`)}</p>
+                <p className="text-body-xs text-neutral-400">{t("There are no items to display at the moment.")}</p>
               </div>
             )}
 
@@ -420,49 +415,57 @@ const Products = () => {
               ? Array.from({ length: 10 }).map((_, index) => (
                   <div
                     key={index.toString()}
-                    className="flex flex-col border border-neutral-200 rounded-lg"
+                    className={styles.card}
                   >
-                    <div className="w-full h-62.25 rounded-t-lg bg-neutral-100 animate-pulse motion-reduce:animate-none" />
+                    <div className={styles.skeletonMedia} />
+                    <div className={styles.skeletonContent}><span /><span /></div>
                   </div>
                 ))
               : catalogData.map((item, index) => (
+                  <Reveal as="article" key={index.toString()} className={styles.cardReveal} delay={(index % 3) * 0.06}>
                   <button
                     type="button"
                     key={index.toString()}
-                    className="flex flex-col border border-neutral-200 rounded-lg"
+                    className={styles.card}
                     onClick={() => {
-                      router.push(`/products/article/${index + 1}`);
+                      router.push(
+                        contentType === "Products"
+                          ? `/products/${item.id}`
+                          : `/products/article/${index + 1}`,
+                      );
                     }}
                   >
+                    <div className={styles.cardMedia} data-type={contentType}>
                     <Image
                       src={item.image}
-                      alt={`Product ${index + 1}`}
+                      alt={item.title}
                       width={item.width}
                       height={item.height}
-                      className="w-full h-62.25 object-cover object-center rounded-lg"
+                      className={styles.image}
                     />
+                    </div>
 
-                    <Flex className="p-3.5 gap-0.5 w-full items-start">
-                      <p className="text-body-xs font-semibold text-accent-600">
+                    <Flex className={styles.cardContent}>
+                      <p className={styles.tag}>
                         {item.tag}
                       </p>
 
-                      <p className="text-body-xs font-semibold text-neutral-700">
+                      <p className={styles.cardTitle}>
                         {item.title}
                       </p>
+                    <span className={styles.cardFooter}>{t("View details")}<span aria-hidden="true">↗</span></span>
                     </Flex>
                   </button>
+                  </Reveal>
                 ))}
           </div>
 
           {!catalogLoading && catalogData.length > 10 && (
             <button
               type="button"
-              className="px-4.5 py-3 border border-neutral-200 rounded-3xl text-body-s font-semibold text-neutral-600 shadow-lg self-center"
+              className={styles.showMore}
               onClick={() => setCurrPage((prev) => prev + 1)}
-            >
-              Show More
-            </button>
+            >{t("Show More")}</button>
           )}
         </Flex>
       </Flex>
@@ -475,10 +478,10 @@ const Products = () => {
         footer={filterActions}
         placeholder={
           activeFilter
-            ? `Search ${activeFilter.title.toLowerCase()}...`
-            : "Search here..."
+            ? `${t("Search")} ${t(activeFilter.title).toLowerCase()}...`
+            : t("Search here...")
         }
-        className="lg:hidden"
+        className={"lg:hidden " + styles.mobileModal}
       >
         {filteredData.map((option, index) => {
           const isSelected = activeFilter
@@ -491,7 +494,7 @@ const Products = () => {
             <button
               key={index.toString()}
               type="button"
-              className="flex px-2.5 py-3 text-left text-body-s gap-2.5 items-center"
+              className={styles.option}
               onClick={() => {
                 setDraftFilters((prev) => {
                   if (isSelected) {
@@ -520,7 +523,7 @@ const Products = () => {
                   variant="Bold"
                 />
               ) : (
-                <Flex className="size-6 bg-neutral-200 rounded-lg" />
+                <Flex className={styles.checkbox} />
               )}
 
               {option.label}
@@ -531,12 +534,12 @@ const Products = () => {
         {activeFilter && filteredData.length === 0 && (
           <p className="px-2.5 py-3 text-body-xs text-neutral-400">
             {activeFilter.data.length === 0
-              ? "No options available"
-              : "No matching options"}
+              ? t("No options available")
+              : t("No matching options")}
           </p>
         )}
       </DropdownModal>
-    </Flex>
+    </main>
   );
 };
 

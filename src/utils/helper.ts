@@ -3,7 +3,11 @@ import axios from "axios";
 
 export const errorResponse = (error: unknown): ResType => {
   if (axios.isAxiosError(error)) {
-    return error.response?.data;
+    return error.response?.data ?? {
+      success: false,
+      message: error.message || "Unable to connect to the server.",
+      data: {},
+    };
   } else {
     return {
       success: false,

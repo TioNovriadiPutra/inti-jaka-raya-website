@@ -24,11 +24,12 @@ const useCatalogController = () => {
         onError(error.message);
       } else if (data) {
         finalData = data.data.data.map((item) => ({
+          id: item.id,
           title: item.title,
           tag: item.product_code || "",
-          image: item.thumbnail[0].image_url,
-          width: item.thumbnail[0].ori_width,
-          height: item.thumbnail[0].ori_height,
+          image: item.thumbnail[0]?.image_url || "/images/products.png",
+          width: item.thumbnail[0]?.ori_width || 500,
+          height: item.thumbnail[0]?.ori_height || 333,
         }));
       }
     }

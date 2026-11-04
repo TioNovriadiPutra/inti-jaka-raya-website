@@ -2,6 +2,7 @@ import {
   ProductDetailDTO,
   ProductDTO,
   ProductInput,
+  ProductPublicDetailDTO,
 } from "@/interfaces/product.interface";
 import { MetaResType, ResType } from "@/interfaces/res.interface";
 import { axiosInstance } from "@/utils/axios";
@@ -64,6 +65,18 @@ export const getProductById = async (
 ): Promise<ResType<ProductDetailDTO>> => {
   try {
     const response = await axiosInstance.get(`/product/detail/${id}`);
+
+    return response.data;
+  } catch (error) {
+    throw errorResponse(error);
+  }
+};
+
+export const getPublicProductById = async (
+  id: number,
+): Promise<ResType<ProductPublicDetailDTO>> => {
+  try {
+    const response = await axiosInstance.get(`/product/${id}`);
 
     return response.data;
   } catch (error) {

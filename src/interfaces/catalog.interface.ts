@@ -1,4 +1,4 @@
-export interface CatalogThumbnailDTO {
+interface CatalogThumbnailDTO {
   image_url: string;
   ori_width: number;
   ori_height: number;

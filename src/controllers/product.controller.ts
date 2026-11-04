@@ -7,12 +7,13 @@ import {
   IndustryDTO,
 } from "@/interfaces/label.interface";
 import { TableType } from "@/interfaces/page.interface";
-import { ProductInput } from "@/interfaces/product.interface";
+import { ProductDetailPageType, ProductInput } from "@/interfaces/product.interface";
 import { getDropdown } from "@/services/util.service";
 import {
   createProduct,
   deleteProduct,
   getProductById,
+  getPublicProductById,
   getProducts,
   updateProduct,
   updaterProductStatus,
@@ -33,6 +34,31 @@ const useProductController = () => {
   const route = useRouter();
 
   const { queryClient, onMutate, onSettled, onSuccess, onError } = useHelper();
+
+  const useGetPublicProductByIdService = (id: number) => {
+    const { data, isLoading, isError, refetch } = useQuery({
+      queryKey: ["getPublicProductById", id],
+      queryFn: () => getPublicProductById(id),
+      enabled: Number.isSafeInteger(id) && id > 0,
+    });
+
+    let finalData: ProductDetailPageType | null = null;
+
+    if (data) {
+      finalData = {
+        id: data.data.id,
+        code: data.data.product_code,
+        title: data.data.product_name,
+        thumbnail: data.data.galleries.find((item) => item.is_thumbnail),
+        galleries: data.data.galleries.filter((item) => !item.is_thumbnail),
+        documents: data.data.documents,
+        descriptions: data.data.descriptions,
+        caseStudies: data.data.case_studies,
+      };
+    }
+
+    return { finalData, isLoading, isError, refetch };
+  };
 
   const useGetCreateProductDropdown = () => {
     const responses = useQueries({
@@ -135,7 +161,7 @@ const useProductController = () => {
     mutationFn: (data: { id: number; closeMenu: () => void }) =>
       updaterProductStatus(data.id),
     onMutate,
-    onSettled: (data, error, variables) => {
+    onSettled: (_data, _error, variables) => {
       variables.closeMenu();
       onSettled();
     },
@@ -425,6 +451,7 @@ const useProductController = () => {
   };
 
   return {
+    useGetPublicProductByIdService,
     useGetCreateProductDropdown,
     createProductService: (body: any) => createProductMutation.mutate(body),
     useGetProductsService,
