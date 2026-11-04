@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
+  // Include native sharp binaries and libvips in serverless API bundles.
+  outputFileTracingIncludes: {
+    "/api/*": ["./node_modules/@img/sharp-*/**/*"],
+  },
   i18n: {
     locales: ["en", "id"],
     defaultLocale: "en",

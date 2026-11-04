@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { SupabaseClient } from "@supabase/supabase-js";
-import sharp from "sharp";
 import fs from "fs/promises";
 import type { File as FormidableFile } from "formidable";
 import { randomUUID } from "crypto";
@@ -8,6 +7,7 @@ import logger from "./logger";
 import pino from "pino";
 
 const getImageDimensions = async (file: FormidableFile) => {
+  const { default: sharp } = await import("sharp");
   const buffer = await fs.readFile(file.filepath);
 
   const metadata = await sharp(buffer).metadata();
