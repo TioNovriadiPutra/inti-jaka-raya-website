@@ -381,7 +381,7 @@ const Navbar = () => {
         {menuOpen && (
           <Flex className="absolute inset-x-0 top-14.5 z-10 h-[calc(100dvh-3.625rem)] min-h-0 bg-primary-900/40 backdrop-blur-sm xl:hidden!">
             <motion.div
-              className="my-3 flex max-h-[calc(100dvh-5.125rem)] min-h-0 w-[calc(100%_-_24px)] max-w-xl shrink-0 self-center flex-col gap-4 overflow-y-auto overscroll-contain rounded-2xl border border-neutral-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl shadow-primary-900/10 sm:p-5"
+              className="my-3 flex max-h-[calc(100dvh-5.125rem)] min-h-0 w-[calc(100%-24px)] max-w-xl shrink-0 self-center flex-col gap-4 overflow-y-auto overscroll-contain rounded-2xl border border-neutral-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl shadow-primary-900/10 sm:p-5"
               initial={{
                 y: "-100%",
               }}
@@ -399,7 +399,7 @@ const Navbar = () => {
                 id="mobile-navigation"
                 role="navigation"
                 aria-label={t("Navigation")}
-                className="w-full min-w-0 gap-1.5 [&_a]:min-w-0 [&_a]:break-words [&_a[aria-current=page]]:border-primary-50 [&_a[aria-current=page]]:bg-primary-50/30 [&_a[aria-current=page]]:text-primary-600"
+                className="w-full min-w-0 gap-1.5 [&_a]:min-w-0 [&_a]:wrap-break-word [&_a[aria-current=page]]:border-primary-50 [&_a[aria-current=page]]:bg-primary-50/30 [&_a[aria-current=page]]:text-primary-600"
               >
                 <Link
                   href="/"
