@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "@/components/custom/Toast";
 import SEO from "@/components/custom/SEO";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { t } = useTranslation();
@@ -214,7 +215,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
         <Toast />
       </Flex>
+
       <Analytics />
+      <SpeedInsights />
     </QueryClientProvider>
   );
 }
