@@ -272,7 +272,9 @@ export default function ProductDetail() {
                         className="rounded-xl border border-neutral-200 bg-white p-4"
                       >
                         <h3 className="text-body-s font-bold leading-snug text-primary-700 wrap-anywhere">
-                          {study.title}
+                          <Link href={`/products/article/${study.id}`} className="rounded hover:underline focus-visible:outline-2 focus-visible:outline-accent-600">
+                            {study.title}
+                          </Link>
                         </h3>
                         <p className="mt-2 whitespace-pre-line text-body-xs leading-relaxed text-neutral-500 wrap-anywhere">
                           {study.problem}

@@ -3,6 +3,7 @@ import {
   CaseStudyDetailDTO,
   CaseStudyDTO,
   CaseStudyInput,
+  CaseStudyPublicDetailDTO,
 } from "@/interfaces/caseStudy.interface";
 import { MetaResType, ResType } from "@/interfaces/res.interface";
 import { axiosInstance } from "@/utils/axios";
@@ -66,6 +67,17 @@ export const getCaseStudyById = async (
   try {
     const response = await axiosInstance.get(`/case-study/detail/${id}`);
 
+    return response.data;
+  } catch (error) {
+    throw errorResponse(error);
+  }
+};
+
+export const getPublicCaseStudyById = async (
+  id: number,
+): Promise<ResType<CaseStudyPublicDetailDTO>> => {
+  try {
+    const response = await axiosInstance.get(`/case-study/${id}`);
     return response.data;
   } catch (error) {
     throw errorResponse(error);

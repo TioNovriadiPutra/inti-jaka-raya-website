@@ -154,7 +154,7 @@ export default function CaseStudyCarousel() {
                       <p className={styles.problemLabel}>{t("The challenge")}</p>
                       <p className={styles.description}>{item.description}</p>
                     </div>
-                    <Link href="/products" className={styles.link} tabIndex={index === currentIndex ? 0 : -1}>
+                    <Link href={`/products/article/${item.id}`} className={styles.link} tabIndex={index === currentIndex ? 0 : -1}>
                       {t("Explore solutions")}<Arrow />
                     </Link>
                   </div>

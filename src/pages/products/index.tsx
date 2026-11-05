@@ -431,7 +431,7 @@ const Products = () => {
                       router.push(
                         contentType === "Products"
                           ? `/products/${item.id}`
-                          : `/products/article/${index + 1}`,
+                          : `/products/article/${item.id}`,
                       );
                     }}
                   >

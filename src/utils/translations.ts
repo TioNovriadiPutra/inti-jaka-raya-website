@@ -1,5 +1,13 @@
 // English is the source language. Brand names and product codes stay unchanged.
 const indonesian: Record<string, string> = {
+  "Case study details": "Detail studi kasus",
+  "Loading case study": "Memuat studi kasus",
+  "Unable to load this case study.": "Studi kasus ini belum dapat dimuat.",
+  "Case study not found.": "Studi kasus tidak ditemukan.",
+  "The case study may be unavailable. Please return to the catalog or try again.": "Studi kasus mungkin tidak tersedia. Silakan kembali ke katalog atau coba lagi.",
+  "Product used": "Produk yang digunakan",
+  "Problem": "Permasalahan",
+  "Open image": "Buka gambar",
   "Product details": "Detail produk",
   "Loading product": "Memuat produk",
   "Unable to load this product.": "Produk ini belum dapat dimuat.",

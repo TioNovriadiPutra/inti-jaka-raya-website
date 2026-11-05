@@ -65,3 +65,29 @@ export interface CaseStudyDetailDTO {
   documents: ProductDocumentDTO[];
   descriptions: ProductDescriptionDTO[];
 }
+
+export interface CaseStudyPublicDetailDTO {
+  id: number;
+  title: string;
+  problem: string;
+  product: { id: number; product_code: string; product_name: string; is_showing: boolean } | null;
+  category: ProductCategoryDTO | null;
+  industry: ProductIndustryDTO | null;
+  application: ProductApplicationDTO | null;
+  division: ProductDivisionDTO | null;
+  galleries: ProductGalleryDTO[];
+  documents: ProductDocumentDTO[];
+  descriptions: ProductDescriptionDTO[];
+}
+
+export interface CaseStudyDetailPageType {
+  id: number;
+  title: string;
+  problem: string;
+  product: CaseStudyPublicDetailDTO["product"];
+  labels: { name: string; value: string }[];
+  thumbnail?: ProductGalleryDTO;
+  galleries: ProductGalleryDTO[];
+  documents: ProductDocumentDTO[];
+  descriptions: ProductDescriptionDTO[];
+}

@@ -1,5 +1,5 @@
 import useHelper from "@/hooks/useHelper";
-import { CaseStudyInput } from "@/interfaces/caseStudy.interface";
+import { CaseStudyDetailPageType, CaseStudyInput } from "@/interfaces/caseStudy.interface";
 import { DropdownType } from "@/interfaces/form.interface";
 import {
   ApplicationDTO,
@@ -15,6 +15,7 @@ import {
   getCaseStudies,
   getCaseStudyById,
   getCaseStudyCarousel,
+  getPublicCaseStudyById,
   updateCaseStudy,
   updateCaseStudyStatus,
 } from "@/services/caseStudy.service";
@@ -36,6 +37,37 @@ const useCaseStudyController = () => {
   const route = useRouter();
 
   const { queryClient, onMutate, onSettled, onError, onSuccess } = useHelper();
+
+  const useGetPublicCaseStudyByIdService = (id: number) => {
+    const { data, isLoading, isError, refetch } = useQuery({
+      queryKey: ["getPublicCaseStudyById", id],
+      queryFn: () => getPublicCaseStudyById(id),
+      enabled: Number.isSafeInteger(id) && id > 0,
+    });
+
+    let finalData: CaseStudyDetailPageType | null = null;
+    if (data) {
+      const study = data.data;
+      finalData = {
+        id: study.id,
+        title: study.title,
+        problem: study.problem,
+        product: study.product?.is_showing ? study.product : null,
+        labels: [
+          { name: "Industry", value: study.industry?.industry_name ?? "" },
+          { name: "Application", value: study.application?.application_name ?? "" },
+          { name: "Division", value: study.division?.division_name ?? "" },
+          { name: "Category", value: study.category?.category_name ?? "" },
+        ].filter((label) => label.value),
+        thumbnail: study.galleries.find((image) => image.is_thumbnail),
+        galleries: study.galleries.filter((image) => !image.is_thumbnail),
+        documents: study.documents,
+        descriptions: study.descriptions,
+      };
+    }
+
+    return { finalData, isLoading, isError, refetch };
+  };
 
   const useGetCaseStudyCarouselService = () => {
     const { data, isLoading, isError, error, refetch } = useQuery({
@@ -379,6 +411,7 @@ const useCaseStudyController = () => {
   });
 
   return {
+    useGetPublicCaseStudyByIdService,
     useGetCaseStudyCarouselService,
     useGetCreateCaseStudyDropdownService,
     createCaseStudyService: (body: any) => createCaseStudyMutation.mutate(body),
