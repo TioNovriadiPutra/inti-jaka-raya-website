@@ -1,5 +1,6 @@
 import useHelper from "@/hooks/useHelper";
-import { CaseStudyDetailPageType, CaseStudyInput } from "@/interfaces/caseStudy.interface";
+import { CaseStudyDetailPageType, CaseStudyInput, CaseStudyPublicDetailDTO } from "@/interfaces/caseStudy.interface";
+import type { ResType } from "@/interfaces/res.interface";
 import { DropdownType } from "@/interfaces/form.interface";
 import {
   ApplicationDTO,
@@ -38,10 +39,11 @@ const useCaseStudyController = () => {
 
   const { queryClient, onMutate, onSettled, onError, onSuccess } = useHelper();
 
-  const useGetPublicCaseStudyByIdService = (id: number) => {
+  const useGetPublicCaseStudyByIdService = (id: number, initialData?: ResType<CaseStudyPublicDetailDTO>) => {
     const { data, isLoading, isError, refetch } = useQuery({
       queryKey: ["getPublicCaseStudyById", id],
       queryFn: () => getPublicCaseStudyById(id),
+      initialData,
       enabled: Number.isSafeInteger(id) && id > 0,
     });
 

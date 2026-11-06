@@ -141,12 +141,11 @@ const Products = () => {
 
   return (
     <main className={styles.page}>
-      {/* Section 1 */}
+
       <Flex className={styles.breadcrumb}>
         <Breadcrumb pages={["Home", "Products"]} color="dark" />
       </Flex>
 
-      {/* Section 2 */}
       <Flex className={styles.container}>
         <Reveal as="header" className={styles.header}>
           <p className={styles.eyebrow}><span />{t("Catalog")}</p>

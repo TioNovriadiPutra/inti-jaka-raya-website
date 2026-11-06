@@ -1,3 +1,4 @@
+import { getPublicProduct } from "@/utils/publicContent.server";
 import {
   errorHandler,
   initiateLogger,
@@ -21,25 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const supabase = createSupabaseClient(req, res);
-    const { data, error } = await supabase
-      .from("products")
-      .select(`
-        id,
-        product_code,
-        product_name,
-        descriptions:product_descriptions (id, title, description),
-        galleries:product_galleries (id, image_url, ori_width, ori_height, is_thumbnail),
-        documents:product_documents (id, doc_url, doc_name),
-        case_studies (id, title, problem)
-      `)
-      .eq("id", id)
-      .eq("is_showing", true)
-      .eq("case_studies.is_showing", true)
-      .order("id", { referencedTable: "descriptions", ascending: true })
-      .order("id", { referencedTable: "galleries", ascending: true })
-      .order("id", { referencedTable: "documents", ascending: true })
-      .order("created_at", { referencedTable: "case_studies", ascending: false })
-      .maybeSingle();
+    const { data, error } = await getPublicProduct(supabase, id);
 
     if (error) {
       return errorHandler(res, log.log, error, error.code);

@@ -11,20 +11,26 @@ import {
   SOCIAL_IMAGE_ALT,
   indonesianPages,
   localizedPath,
+  type DetailSEO,
 } from "@/utils/seo";
 
-export default function SEO() {
+export default function SEO({ detail }: { detail?: DetailSEO }) {
   const { pathname, locale = "en" } = useRouter();
   const pages = locale === "id" ? indonesianPages : publicPages;
-  const page = pages[pathname as PublicPath];
+  const detailPath = pathname === "/products/[id]" || pathname === "/products/article/[id]";
+  const page = detailPath && detail ? detail : pages[pathname as PublicPath];
+  const path = detailPath && detail ? detail.path : pathname;
   const noindex = !page;
   const title =
     page?.title ??
     `${pathname.startsWith("/cms") ? "CMS" : "Page"} | ${SITE_NAME}`;
   const description = page?.description ?? pages["/"].description;
-  const canonical = page ? absoluteUrl(localizedPath(pathname, locale)) : undefined;
-  const image = absoluteUrl(locale === "id" ? SOCIAL_IMAGE_ID : SOCIAL_IMAGE);
-  const imageAlt = locale === "id"
+  const canonical = page ? absoluteUrl(localizedPath(path, locale)) : undefined;
+  const thumbnail = detailPath ? detail?.image : undefined;
+  const image = absoluteUrl(thumbnail?.url ?? (locale === "id" ? SOCIAL_IMAGE_ID : SOCIAL_IMAGE));
+  const imageWidth = thumbnail ? thumbnail.width : 1200;
+  const imageHeight = thumbnail ? thumbnail.height : 630;
+  const imageAlt = thumbnail ? title : locale === "id"
     ? "PT. Inti Jaka Raya — komposit perbaikan industri dan pelapis pelindung di Indonesia"
     : SOCIAL_IMAGE_ALT;
   const structuredData = {
@@ -74,8 +80,8 @@ export default function SEO() {
         primaryImageOfPage: {
           "@type": "ImageObject",
           url: image,
-          width: 1200,
-          height: 630,
+          ...(imageWidth > 0 ? { width: imageWidth } : {}),
+          ...(imageHeight > 0 ? { height: imageHeight } : {}),
         },
         isPartOf: { "@id": `${SITE_URL}/#website` },
         about: { "@id": `${SITE_URL}/#organization` },
@@ -107,7 +113,7 @@ export default function SEO() {
       <link rel="icon" type="image/png" sizes="32x32" href="/icon.png" key="favicon" />
       {canonical && <link rel="canonical" href={canonical} key="canonical" />}
       {page && ["en", "id", "x-default"].map((language) => (
-        <link rel="alternate" hrefLang={language} href={absoluteUrl(localizedPath(pathname, language))} key={`alternate:${language}`} />
+        <link rel="alternate" hrefLang={language} href={absoluteUrl(localizedPath(path, language))} key={`alternate:${language}`} />
       ))}
       <meta property="og:type" content="website" key="og:type" />
       <meta property="og:site_name" content={SITE_NAME} key="og:site_name" />
@@ -127,9 +133,9 @@ export default function SEO() {
         content={image}
         key="og:image:secure_url"
       />
-      <meta property="og:image:type" content="image/jpeg" key="og:image:type" />
-      <meta property="og:image:width" content="1200" key="og:image:width" />
-      <meta property="og:image:height" content="630" key="og:image:height" />
+      {!thumbnail && <meta property="og:image:type" content="image/jpeg" key="og:image:type" />}
+      {imageWidth > 0 && <meta property="og:image:width" content={String(imageWidth)} key="og:image:width" />}
+      {imageHeight > 0 && <meta property="og:image:height" content={String(imageHeight)} key="og:image:height" />}
       <meta
         property="og:image:alt"
         content={imageAlt}

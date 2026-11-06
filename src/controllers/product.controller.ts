@@ -7,7 +7,8 @@ import {
   IndustryDTO,
 } from "@/interfaces/label.interface";
 import { TableType } from "@/interfaces/page.interface";
-import { ProductDetailPageType, ProductInput } from "@/interfaces/product.interface";
+import { ProductDetailPageType, ProductInput, ProductPublicDetailDTO } from "@/interfaces/product.interface";
+import type { ResType } from "@/interfaces/res.interface";
 import { getDropdown } from "@/services/util.service";
 import {
   createProduct,
@@ -35,10 +36,11 @@ const useProductController = () => {
 
   const { queryClient, onMutate, onSettled, onSuccess, onError } = useHelper();
 
-  const useGetPublicProductByIdService = (id: number) => {
+  const useGetPublicProductByIdService = (id: number, initialData?: ResType<ProductPublicDetailDTO>) => {
     const { data, isLoading, isError, refetch } = useQuery({
       queryKey: ["getPublicProductById", id],
       queryFn: () => getPublicProductById(id),
+      initialData,
       enabled: Number.isSafeInteger(id) && id > 0,
     });
 

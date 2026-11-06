@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -6,8 +5,12 @@ import Reveal from "@/components/shared/Reveal";
 import useCaseStudyController from "@/controllers/caseStudy.controller";
 import useTranslation from "@/hooks/useTranslation";
 import { ArrowDown } from "../../../../public";
+import type { InferGetServerSidePropsType } from "next";
+import { getCaseStudyPageProps } from "@/utils/detailSEO.server";
 
-export default function CaseStudyArticle() {
+export const getServerSideProps = getCaseStudyPageProps;
+
+export default function CaseStudyArticle({ initialCaseStudy }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const { t } = useTranslation();
   const id =
@@ -21,15 +24,10 @@ export default function CaseStudyArticle() {
     isLoading,
     isError,
     refetch,
-  } = useGetPublicCaseStudyByIdService(id);
+  } = useGetPublicCaseStudyByIdService(id, initialCaseStudy);
 
   return (
     <main className="min-w-0 flex-1 bg-white px-5 pb-14 pt-6 font-sans md:px-6 lg:px-10 xl:px-30 xl:pb-24 xl:pt-8">
-      <Head>
-        <title>
-          {study?.title ?? t("Case study details")} | PT. Inti Jaka Raya
-        </title>
-      </Head>
       <div className="mx-auto w-full max-w-300">
         <nav
           aria-label={t("Breadcrumb")}
@@ -67,7 +65,7 @@ export default function CaseStudyArticle() {
           </span>
         </nav>
 
-        {!router.isReady || isLoading ? (
+        {isLoading ? (
           <div
             role="status"
             aria-label={t("Loading case study")}

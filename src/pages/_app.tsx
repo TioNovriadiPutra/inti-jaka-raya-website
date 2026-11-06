@@ -47,7 +47,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SEO />
+      <SEO detail={pageProps.seo} />
       <Flex className="relative w-dvw h-dvh overflow-hidden">
         {!isCMS && <Navbar />}
 

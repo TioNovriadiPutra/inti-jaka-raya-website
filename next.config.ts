@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: true,
   // Include native sharp binaries and libvips in serverless API bundles.
   outputFileTracingIncludes: {

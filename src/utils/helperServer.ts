@@ -6,18 +6,6 @@ import { randomUUID } from "crypto";
 import logger from "./logger";
 import pino from "pino";
 
-const getImageDimensions = async (file: FormidableFile) => {
-  const { default: sharp } = await import("sharp");
-  const buffer = await fs.readFile(file.filepath);
-
-  const metadata = await sharp(buffer).metadata();
-
-  return {
-    width: metadata.width ?? 0,
-    height: metadata.height ?? 0,
-  };
-};
-
 export const getFilePath = (url: string) => {
   const splitUrl = url.split("/");
   const splitUrlLength = splitUrl.length;
@@ -31,9 +19,9 @@ export const uploadImage = async (
   supabase: SupabaseClient<any, "public", "public", any, any>,
   storage: string,
 ) => {
-  const { width, height } = await getImageDimensions(file);
-
+  const { default: sharp } = await import("sharp");
   const buffer = await fs.readFile(file.filepath);
+  const metadata = await sharp(buffer).metadata();
 
   const extension = file.originalFilename?.split(".").pop() ?? "jpg";
 
@@ -59,8 +47,8 @@ export const uploadImage = async (
 
   return {
     image_url: urlData.publicUrl,
-    ori_width: width,
-    ori_height: height,
+    ori_width: metadata.width ?? 0,
+    ori_height: metadata.height ?? 0,
   };
 };
 

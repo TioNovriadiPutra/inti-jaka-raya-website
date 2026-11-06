@@ -20,11 +20,11 @@ export const createProduct = async (body: ProductInput): Promise<ResType> => {
     formData.append("application", body.application!.value);
     formData.append("thumbnail", body.thumbnail!);
 
-    body.galleries.map((gallery) => {
+    body.galleries.forEach((gallery) => {
       formData.append("galleries", gallery);
     });
 
-    body.documents.map((doc) => {
+    body.documents.forEach((doc) => {
       formData.append(
         "documents",
         doc instanceof File ? doc : JSON.stringify(doc),
@@ -99,11 +99,11 @@ export const updateProduct = async (
     formData.append("application", body.application!.value);
     formData.append("thumbnail", body.thumbnail!);
 
-    body.galleries.map((gallery) => {
+    body.galleries.forEach((gallery) => {
       formData.append("galleries", gallery);
     });
 
-    body.documents.map((doc) => {
+    body.documents.forEach((doc) => {
       formData.append("documents", doc);
     });
 

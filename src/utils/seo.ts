@@ -1,5 +1,12 @@
 export const SITE_NAME = "PT. Inti Jaka Raya";
 
+export interface DetailSEO {
+  path: string;
+  title: string;
+  description: string;
+  image?: { url: string; width: number; height: number };
+}
+
 export const SITE_URL = new URL(
   process.env.NEXT_PUBLIC_SITE_URL || "https://intijakaraya.com",
 ).origin;

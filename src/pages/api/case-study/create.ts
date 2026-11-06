@@ -48,8 +48,6 @@ export default async function handler(
     const descriptions = JSON.parse(fields.descriptions?.[0] ?? "[]");
 
     const supabase = createSupabaseClient(req, res);
-
-    // Add Case Study
     const { data, error } = await supabase
       .from("case_studies")
       .insert({
@@ -67,8 +65,6 @@ export default async function handler(
     if (error) {
       return errorHandler(res, log.log, error, error.code);
     }
-
-    // Add Thumbnail
     try {
       const image = await uploadImage(thumbnail, supabase, "case-studies");
 
@@ -86,8 +82,6 @@ export default async function handler(
     } catch (error: any) {
       return errorHandler(res, log.log, error, error.code ?? undefined);
     }
-
-    // Add Gallery
     try {
       const images = await Promise.all(
         galleries.map(async (gallery: FormidableFile) => {
@@ -112,8 +106,6 @@ export default async function handler(
     } catch (error: any) {
       return errorHandler(res, log.log, error, error.code ?? undefined);
     }
-
-    // Add Document
     try {
       const docs = await Promise.all(
         documents.map(async (document: FormidableFile) => {
@@ -137,8 +129,6 @@ export default async function handler(
     } catch (error: any) {
       return errorHandler(res, log.log, error, error.code ?? undefined);
     }
-
-    // Add Description
     descriptions.forEach(async (desc: ProductSectionInput) => {
       const { error: caseStudyDescriptionError } = await supabase
         .from("case_study_descriptions")

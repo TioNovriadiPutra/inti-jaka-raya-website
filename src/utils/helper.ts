@@ -8,11 +8,11 @@ export const errorResponse = (error: unknown): ResType => {
       message: error.message || "Unable to connect to the server.",
       data: {},
     };
-  } else {
-    return {
-      success: false,
-      message: "Internal server error!",
-      data: error,
-    };
   }
+
+  return {
+    success: false,
+    message: "Internal server error!",
+    data: error,
+  };
 };

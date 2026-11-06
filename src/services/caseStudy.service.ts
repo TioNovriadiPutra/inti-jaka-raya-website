@@ -24,11 +24,11 @@ export const createCaseStudy = async (
     formData.append("application", body.application!.value);
     formData.append("thumbnail", body.thumbnail!);
 
-    body.galleries.map((gallery) => {
+    body.galleries.forEach((gallery) => {
       formData.append("galleries", gallery);
     });
 
-    body.documents.map((doc) => {
+    body.documents.forEach((doc) => {
       formData.append("documents", doc);
     });
 
@@ -112,11 +112,11 @@ export const updateCaseStudy = async (
     formData.append("application", body.application!.value);
     formData.append("thumbnail", body.thumbnail!);
 
-    body.galleries.map((gallery) => {
+    body.galleries.forEach((gallery) => {
       formData.append("galleries", gallery);
     });
 
-    body.documents.map((doc) => {
+    body.documents.forEach((doc) => {
       formData.append("documents", doc);
     });
 

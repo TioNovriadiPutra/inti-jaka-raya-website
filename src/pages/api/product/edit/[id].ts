@@ -64,8 +64,6 @@ export default async function handler(
     const { id } = req.query;
 
     const supabase = createSupabaseClient(req, res);
-
-    // Product Update
     const { data: productData, error: updateProductError } = await supabase
       .from("products")
       .update({
@@ -87,8 +85,6 @@ export default async function handler(
         data: {},
       });
     }
-
-    // Gallery Get
     const { data: oldGalleries, error: oldGalleriesError } = await supabase
       .from("product_galleries")
       .select()
@@ -101,8 +97,6 @@ export default async function handler(
         data: {},
       });
     }
-
-    // Thumbnail Update
     if (newThumbnail) {
       const thumbnailData = oldGalleries.find((item) => item.is_thumbnail);
 
@@ -155,8 +149,6 @@ export default async function handler(
         });
       }
     }
-
-    // Gallery Update
     const deletedGalleries = oldGalleries?.filter(
       (gallery) =>
         !existingGalleryIds.includes(String(gallery.id)) &&
@@ -196,8 +188,6 @@ export default async function handler(
         });
       }
     }
-
-    // Gallery Insert
     try {
       const images = await Promise.all(
         newGalleries.map(async (gallery: FormidableFile) => {
@@ -226,8 +216,6 @@ export default async function handler(
         data: {},
       });
     }
-
-    // Document Get
     const { data: oldDocuments, error: oldDocumentsError } = await supabase
       .from("product_documents")
       .select()
@@ -240,8 +228,6 @@ export default async function handler(
         data: {},
       });
     }
-
-    // Document Update
     const deletedDocuments = oldDocuments?.filter(
       (document) => !existingDocumentIds.includes(String(document.id)),
     );
@@ -279,8 +265,6 @@ export default async function handler(
         });
       }
     }
-
-    // Document Insert
     try {
       const documents = await Promise.all(
         newDocuments.map(async (document: FormidableFile) => {
@@ -308,8 +292,6 @@ export default async function handler(
         data: {},
       });
     }
-
-    // Description Get
     const { data: descriptionData, error: descriptionError } = await supabase
       .from("product_descriptions")
       .select()

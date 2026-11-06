@@ -24,15 +24,10 @@ export interface CaseStudyInput {
   descriptions: ProductSectionInput[];
 }
 
-interface CaseStudyIndustryDTO {
-  id: number;
-  industry_name: string;
-}
-
 export interface CaseStudyDTO {
   id: number;
   title: string;
-  industry: CaseStudyIndustryDTO;
+  industry: ProductIndustryDTO;
   is_showing: boolean;
 }
 

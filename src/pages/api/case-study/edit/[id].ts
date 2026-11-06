@@ -65,8 +65,6 @@ export default async function handler(
     const { id } = req.query;
 
     const supabase = createSupabaseClient(req, res);
-
-    // Case Study Update
     const { data: caseStudyData, error: caseStudyError } = await supabase
       .from("case_studies")
       .update({
@@ -85,8 +83,6 @@ export default async function handler(
     if (caseStudyError) {
       return errorHandler(res, log.log, caseStudyError, caseStudyError.code);
     }
-
-    // Case Study Gallery Get
     const { data: oldCSGalleryData, error: oldCSGalleryError } = await supabase
       .from("case_study_galleries")
       .select()
@@ -106,8 +102,6 @@ export default async function handler(
         !existingGalleryIds.includes(String(gallery.id)) &&
         !gallery.is_thumbnail,
     );
-
-    // Case Study Thumbnail Update
     if (newThumbnail) {
       const thumbnailData = oldCSGalleryData.find((item) => item.is_thumbnail);
 
@@ -153,8 +147,6 @@ export default async function handler(
         return errorHandler(res, log.log, error, error.code ?? undefined);
       }
     }
-
-    // Case Study Gallery Update
     if (deletedGalleries.length > 0) {
       const deletedPaths = deletedGalleries.map((gallery) =>
         getFilePath(gallery.image_url),
@@ -185,8 +177,6 @@ export default async function handler(
         );
       }
     }
-
-    // Case Study Gallery Insert
     try {
       const images = await Promise.all(
         newGalleries.map(async (gallery: FormidableFile) => {
@@ -211,8 +201,6 @@ export default async function handler(
     } catch (error: any) {
       return errorHandler(res, log.log, error, error.code ?? undefined);
     }
-
-    // Case Study Document Get
     const { data: oldCSDocumentData, error: oldCSDocumentError } =
       await supabase
         .from("case_study_documents")
@@ -231,8 +219,6 @@ export default async function handler(
     const deletedDocuments = oldCSDocumentData.filter(
       (document) => !existingDocumentIds.includes(String(document.id)),
     );
-
-    // Case Study Document Update
     if (deletedDocuments.length > 0) {
       const deletedPaths = deletedDocuments.map((document) =>
         getFilePath(document.doc_url),
@@ -263,8 +249,6 @@ export default async function handler(
         );
       }
     }
-
-    // Case Study Document Insert
     try {
       const documents = await Promise.all(
         newDocuments.map(async (document: FormidableFile) => {
@@ -288,8 +272,6 @@ export default async function handler(
     } catch (error: any) {
       return errorHandler(res, log.log, error, error.code ?? undefined);
     }
-
-    // Case Study Description Get
     const { data: oldCSDescriptionData, error: oldCSDescriptionError } =
       await supabase
         .from("case_study_descriptions")
@@ -311,8 +293,6 @@ export default async function handler(
           .map((desc2: ProductSectionInput) => desc2.id)
           .includes(desc.id),
     );
-
-    // Case Study Description Delete
     if (deletedDescriptions.length > 0) {
       const deletedIds = deletedDescriptions.map((del) => del.id);
 
@@ -330,8 +310,6 @@ export default async function handler(
         );
       }
     }
-
-    // Case Study Description Update
     oldDescription.forEach(async (item: ProductSectionInput) => {
       const { error } = await supabase
         .from("case_study_descriptions")
@@ -345,8 +323,6 @@ export default async function handler(
         return errorHandler(res, log.log, error, error.code);
       }
     });
-
-    // Case Study Description Insert
     newDescription.forEach(async (item: ProductSectionInput) => {
       const { error } = await supabase.from("case_study_descriptions").insert({
         title: item.title,
