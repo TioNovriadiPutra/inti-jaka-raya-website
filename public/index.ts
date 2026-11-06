@@ -11,6 +11,5 @@ export { default as SearchIcon } from "./search.svg";
 export { default as ArrowDown } from "./arrowDown.svg";
 export { default as SuccessIcon } from "./success.svg";
 export { default as ErrorIcon } from "./error.svg";
-export { default as Logo } from "./logo.svg";
 export { default as CloseIcon } from "./close.svg";
 export { default as CloseWhiteIcon } from "./closeWhite.svg";

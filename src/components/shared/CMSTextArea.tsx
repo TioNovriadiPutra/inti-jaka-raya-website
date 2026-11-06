@@ -9,19 +9,19 @@ type Props = {
 
 const CMSTextArea = ({ field, label, error }: Props) => {
   return (
-    <Flex className="gap-3">
-      <p className="text-body-xs font-semibold text-neutral-900">
+    <Flex className="min-w-0 gap-2">
+      <p className="text-small font-bold text-primary-700">
         {label}{" "}
         {error && <span className="text-red-500">({error.message})</span>}
       </p>
 
       <Flex
-        className={`flex-row! items-center px-3.5 py-2 bg-white border ${error ? "border-red-500" : "border-neutral-200"} rounded-md h-25`}
+        className={`min-w-0 flex-row! items-center border bg-white px-4 py-3 shadow-xs transition-colors focus-within:border-primary-300 focus-within:ring-3 focus-within:ring-primary-50 motion-reduce:transition-none ${error ? "border-red-500" : "border-neutral-200"} rounded-xl min-h-36`}
       >
         <textarea
           {...field}
           placeholder="Input here..."
-          className="h-full w-full text-body-xs text-neutral-900 outline-none"
+          className="min-h-30 min-w-0 w-full resize-y bg-transparent text-small leading-relaxed text-neutral-700 outline-none placeholder:text-neutral-400"
         ></textarea>
       </Flex>
     </Flex>

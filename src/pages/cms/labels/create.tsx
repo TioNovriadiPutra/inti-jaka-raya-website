@@ -23,12 +23,12 @@ const CMSCreateLabel = () => {
       title="Create Label"
       onSubmit={handleSubmit((data) => createLabelService(data))}
     >
-      <Flex className="bg-white border border-neutral-200 rounded-lg">
-        <Flex className="p-6">
-          <h5 className="font-bold text-neutral-900">Label Details</h5>
+      <Flex className="min-w-0 rounded-2xl border border-neutral-200 bg-white shadow-[0_6px_24px_-20px_var(--primary-900)]">
+        <Flex className="border-b border-neutral-100 px-5 py-5 md:px-7">
+          <h5 className="text-body-s font-extrabold tracking-tight text-primary-700">Label Details</h5>
         </Flex>
 
-        <Flex className="px-6 pb-6 gap-4.5">
+        <Flex className="gap-5 px-5 py-6 md:px-7">
           <Controller
             control={control}
             name="labelName"

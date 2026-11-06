@@ -76,14 +76,17 @@ export const aboutSection2Data = [
 export const cmsSidebarData = [
   {
     icon: Box1,
+    label: "Products",
     dest: "/cms/products",
   },
   {
     icon: Document,
+    label: "Case Studies",
     dest: "/cms/case-studies",
   },
   {
     icon: ClipboardText,
+    label: "Labels",
     dest: "/cms/labels",
   },
 ];

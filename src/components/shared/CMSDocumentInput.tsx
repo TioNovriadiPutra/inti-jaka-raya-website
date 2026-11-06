@@ -18,19 +18,19 @@ const CMSDocumentInput = ({ control }: Props) => {
         name="documents"
         render={({ field }) => (
           <>
-            <Flex className="px-6 pb-6 border-b border-b-neutral-200 gap-4">
+            <Flex className="min-w-0 gap-5 border-b border-neutral-100 px-5 pb-6 pt-5 md:px-7">
               {field.value.map((val: File | string, index: number) => (
                 <Flex
                   key={index.toString()}
-                  className="px-3.5 py-2 border border-neutral-200 rounded-md flex-row! items-center justify-between"
+                  className="min-w-0 flex-row! items-center justify-between gap-4 rounded-xl border border-neutral-200 bg-neutral-50/40 px-4 py-3"
                 >
-                  <p className="text-body-xs text-neutral-900">
+                  <p className="min-w-0 text-small text-neutral-700 wrap-anywhere">
                     {val instanceof File ? val.name : val.split("|")[1]}
                   </p>
 
                   <button
                     type="button"
-                    className="flex size-4.5 rounded-full bg-neutral-400 items-center justify-center"
+                    className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-neutral-400 transition-colors hover:bg-red-500 motion-reduce:transition-none"
                     onClick={() => {
                       const newVal = field.value.filter(
                         (_: File | string, i: number) => i !== index,
@@ -60,17 +60,17 @@ const CMSDocumentInput = ({ control }: Props) => {
         )}
       />
 
-      <Flex className="py-[14.5px] items-center">
+      <Flex className="items-center px-5 py-4 md:px-7">
         <button
           type="button"
-          className="flex items-center px-4 py-2 gap-1"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-primary-50 bg-primary-50/30 px-4 py-2 text-primary-600 transition-colors hover:border-primary-100 hover:bg-primary-50/60 motion-reduce:transition-none"
           onClick={() => {
             documentRef.current?.click();
           }}
         >
           <AddCircle size={16} color="var(--neutral-900)" />
 
-          <p className="text-body-xs font-bold text-neutral-900">
+          <p className="text-small font-bold text-primary-600">
             Add Document
           </p>
         </button>

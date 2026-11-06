@@ -12,13 +12,13 @@ const EmptyState = ({
 }: Props) => {
   return (
     <Flex className="min-h-64 flex-1 items-center justify-center px-6 py-12 text-center">
-      <Flex className="mb-5 size-14 items-center justify-center rounded-2xl border border-neutral-200 bg-neutral-50">
+      <Flex className="mb-5 size-16 items-center justify-center rounded-2xl border border-primary-50 bg-primary-50/30">
         <Box1 size={26} color="var(--neutral-400)" variant="Bulk" />
       </Flex>
 
-      <h6 className="mb-1.5 font-semibold text-neutral-900">{title}</h6>
+      <h6 className="mb-2 text-body-s font-bold text-primary-700">{title}</h6>
 
-      <p className="max-w-80 text-body-xs text-neutral-500">{description}</p>
+      <p className="max-w-80 text-small leading-relaxed text-neutral-500">{description}</p>
     </Flex>
   );
 };

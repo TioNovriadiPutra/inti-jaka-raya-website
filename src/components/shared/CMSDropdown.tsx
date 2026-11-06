@@ -37,8 +37,8 @@ const CMSDropdown = ({ field, label, items, error, disabled }: Props) => {
   }, [openDropdown]);
 
   return (
-    <Flex ref={dropdownRef} className="gap-3 relative">
-      <p className="text-body-xs font-semibold text-neutral-900">
+    <Flex ref={dropdownRef} className="relative min-w-0 gap-2">
+      <p className="text-small font-bold text-primary-700">
         {label}{" "}
         {error && <span className="text-red-500">({error.message})</span>}
       </p>
@@ -46,10 +46,10 @@ const CMSDropdown = ({ field, label, items, error, disabled }: Props) => {
       <button
         type="button"
         disabled={disabled}
-        className={`flex items-center px-3.5 py-2 ${disabled ? "bg-neutral-100" : "bg-white"} border ${error ? "border-red-500" : "border-neutral-200"} rounded-md ${disabled ? "cursor-not-allowed!" : ""}`}
+        className={`flex min-h-12 min-w-0 items-center gap-3 px-4 py-3 shadow-xs transition-colors focus-visible:outline-2 focus-visible:outline-accent-600 motion-reduce:transition-none ${disabled ? "bg-neutral-100" : "bg-white"} border ${error ? "border-red-500" : "border-neutral-200"} rounded-xl ${disabled ? "cursor-not-allowed!" : ""}`}
         onClick={() => setOpenDropdown((prev) => !prev)}
       >
-        <p className="flex-1 text-body-xs text-neutral-900 text-left">
+        <p className="min-w-0 flex-1 text-left text-small text-neutral-700 wrap-anywhere">
           {field.value ? field.value.label : "Select here..."}
         </p>
 
@@ -71,13 +71,13 @@ const CMSDropdown = ({ field, label, items, error, disabled }: Props) => {
               scale: 0,
               opacity: 0,
             }}
-            className="flex flex-col absolute z-50 top-[110%] left-0 right-0 p-2 bg-white border border-neutral-200 rounded-[14px] origin-top"
+            className="absolute inset-x-0 top-[calc(100%+8px)] z-50 flex max-h-72 origin-top flex-col overflow-y-auto rounded-xl border border-neutral-200 bg-white p-1.5 shadow-xl shadow-primary-900/10"
           >
             {items.map((item, index) => (
               <button
                 key={index.toString()}
                 type="button"
-                className="flex items-center gap-2.5 px-2.5 py-3 hover:bg-neutral-100 duration-300 transition-colors rounded-lg"
+                className="flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-primary-50/40 focus-visible:outline-2 focus-visible:outline-accent-600 motion-reduce:transition-none"
                 onClick={() => {
                   field.onChange(item);
                   setOpenDropdown(false);
@@ -90,10 +90,10 @@ const CMSDropdown = ({ field, label, items, error, disabled }: Props) => {
                     variant="Bold"
                   />
                 ) : (
-                  <Flex className="size-6 bg-neutral-200 rounded-lg" />
+                  <Flex className="size-6 shrink-0 rounded-md border border-neutral-200 bg-neutral-50" />
                 )}
 
-                <p className="text-body-xs text-neutral-700">{item.label}</p>
+                <p className="min-w-0 text-small text-neutral-600 wrap-anywhere">{item.label}</p>
               </button>
             ))}
           </motion.div>

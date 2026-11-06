@@ -15,7 +15,7 @@ const CMSGalleryInput = ({ control }: Props) => {
 
   return (
     <>
-      <Flex className="flex-row! px-6 pb-6 gap-4">
+      <Flex className="min-w-0 flex-col! gap-5 px-5 pb-6 pt-5 md:flex-row! md:px-7">
         <Controller
           control={control}
           rules={{
@@ -26,7 +26,7 @@ const CMSGalleryInput = ({ control }: Props) => {
             <>
               <button
                 type="button"
-                className={`relative flex flex-col w-33.25 h-25 border ${error ? "border-red-500" : "border-neutral-200"} rounded-lg bg-neutral-100 items-center justify-center gap-3 overflow-hidden shrink-0`}
+                className={`relative flex flex-col h-32 w-40 border-2 border-dashed ${error ? "border-red-500" : "border-neutral-200"} rounded-xl bg-neutral-50 hover:bg-primary-50/30 focus-visible:outline-2 focus-visible:outline-accent-600 items-center justify-center gap-3 overflow-hidden shrink-0`}
                 onClick={() => {
                   thumbnailRef.current?.click();
                 }}
@@ -47,7 +47,7 @@ const CMSGalleryInput = ({ control }: Props) => {
 
                     <button
                       type="button"
-                      className="flex size-4.5 rounded-full bg-white items-center justify-center shadow-[0_1px_5px_rgba(0,0,0,0.25)] absolute z-20 top-1.25 right-1.25"
+                      className="absolute right-2 top-2 z-20 flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-white shadow-sm transition-colors hover:bg-red-50 motion-reduce:transition-none"
                       onClick={(e) => {
                         e.stopPropagation();
                         field.onChange(undefined);
@@ -60,7 +60,7 @@ const CMSGalleryInput = ({ control }: Props) => {
                   <>
                     <PictureFrame size="32" color="var(--neutral-400)" />
 
-                    <p className="text-body-xs font-semibold text-neutral-400">
+                    <p className="text-small font-semibold text-neutral-500">
                       Thumbnail
                     </p>
                   </>
@@ -80,18 +80,18 @@ const CMSGalleryInput = ({ control }: Props) => {
           )}
         />
 
-        <Flex className="h-full w-px bg-neutral-200" />
+        <Flex className="hidden w-px shrink-0 self-stretch bg-neutral-200 md:block" />
 
         <Controller
           control={control}
           name="galleries"
           render={({ field }) => (
             <>
-              <Flex className="flex-row! overflow-x-auto gap-4">
+              <Flex className="min-w-0 flex-1 flex-row! gap-3 overflow-x-auto pb-2">
                 {field.value.map((val: File | string, index: number) => (
                   <Flex
                     key={index.toString()}
-                    className="relative w-33.25 h-25 rounded-lg overflow-hidden border border-neutral-200 shrink-0"
+                    className="relative h-32 w-40 shrink-0 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
                   >
                     <Image
                       src={
@@ -107,7 +107,7 @@ const CMSGalleryInput = ({ control }: Props) => {
 
                     <button
                       type="button"
-                      className="flex size-4.5 rounded-full bg-white items-center justify-center shadow-[0_1px_5px_rgba(0,0,0,0.25)] absolute z-20 top-1.25 right-1.25"
+                      className="absolute right-2 top-2 z-20 flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-white shadow-sm transition-colors hover:bg-red-50 motion-reduce:transition-none"
                       onClick={() => {
                         const newVal = field.value.filter(
                           (_: File | string, i: number) => i !== index,
@@ -138,17 +138,17 @@ const CMSGalleryInput = ({ control }: Props) => {
         />
       </Flex>
 
-      <Flex className="py-[14.5px] items-center border-t border-t-neutral-200">
+      <Flex className="items-center border-t border-neutral-100 px-5 py-4 md:px-7">
         <button
           type="button"
-          className="flex items-center px-4 py-2 gap-1"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-primary-50 bg-primary-50/30 px-4 py-2 text-primary-600 transition-colors hover:border-primary-100 hover:bg-primary-50/60 motion-reduce:transition-none"
           onClick={() => {
             galleryRef.current?.click();
           }}
         >
           <AddCircle size={16} color="var(--neutral-900)" />
 
-          <p className="text-body-xs font-bold text-neutral-900">Add Image</p>
+          <p className="text-small font-bold text-primary-600">Add Image</p>
         </button>
       </Flex>
     </>

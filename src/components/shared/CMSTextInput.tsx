@@ -9,19 +9,19 @@ type Props = {
 
 const CMSTextInput = ({ field, label, error }: Props) => {
   return (
-    <Flex className="gap-3">
-      <p className="text-body-xs font-semibold text-neutral-900">
+    <Flex className="min-w-0 gap-2">
+      <p className="text-small font-bold text-primary-700">
         {label}{" "}
         {error && <span className="text-red-500">({error.message})</span>}
       </p>
 
       <Flex
-        className={`flex-row! items-center px-3.5 py-2 bg-white border ${error ? "border-red-500" : "border-neutral-200"} rounded-md`}
+        className={`min-w-0 flex-row! items-center border bg-white px-4 py-3 shadow-xs transition-colors focus-within:border-primary-300 focus-within:ring-3 focus-within:ring-primary-50 motion-reduce:transition-none ${error ? "border-red-500" : "border-neutral-200"} rounded-xl`}
       >
         <input
           {...field}
           placeholder="Input here..."
-          className="flex-1 text-body-xs text-neutral-900 outline-none"
+          className="min-w-0 w-full flex-1 bg-transparent text-small text-neutral-700 outline-none placeholder:text-neutral-400"
         />
       </Flex>
     </Flex>

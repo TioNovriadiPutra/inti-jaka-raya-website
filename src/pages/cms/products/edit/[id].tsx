@@ -73,13 +73,13 @@ const CMSEditProduct = () => {
         updateProductService({ id: Number(id), body: data }),
       )}
     >
-      <Flex className="bg-white border border-neutral-200 rounded-lg mb-6">
-        <Flex className="p-6">
-          <h5 className="font-bold text-neutral-900">Item Details</h5>
+      <Flex className="min-w-0 rounded-2xl border border-neutral-200 bg-white shadow-[0_6px_24px_-20px_var(--primary-900)]">
+        <Flex className="border-b border-neutral-100 px-5 py-5 md:px-7">
+          <h5 className="text-body-s font-extrabold tracking-tight text-primary-700">Item Details</h5>
         </Flex>
 
         <Flex
-          className={`px-6 pb-6 gap-3.5 ${dropdownLoading ? "items-center" : ""}`}
+          className={`grid! min-w-0 gap-5 px-5 py-6 md:grid-cols-2 md:px-7 ${dropdownLoading ? "items-center" : ""}`}
         >
           {dropdownLoading ? (
             <Ring2
@@ -190,25 +190,25 @@ const CMSEditProduct = () => {
         </Flex>
       </Flex>
 
-      <Flex className="bg-white border border-neutral-200 rounded-lg mb-6">
-        <Flex className="p-6">
-          <h5 className="font-bold text-neutral-900">Gallery</h5>
+      <Flex className="min-w-0 rounded-2xl border border-neutral-200 bg-white shadow-[0_6px_24px_-20px_var(--primary-900)]">
+        <Flex className="border-b border-neutral-100 px-5 py-5 md:px-7">
+          <h5 className="text-body-s font-extrabold tracking-tight text-primary-700">Gallery</h5>
         </Flex>
 
         <CMSGalleryInput control={control} />
       </Flex>
 
-      <Flex className="bg-white border border-neutral-200 rounded-lg mb-6">
-        <Flex className="p-6">
-          <h5 className="font-bold text-neutral-900">Document</h5>
+      <Flex className="min-w-0 rounded-2xl border border-neutral-200 bg-white shadow-[0_6px_24px_-20px_var(--primary-900)]">
+        <Flex className="border-b border-neutral-100 px-5 py-5 md:px-7">
+          <h5 className="text-body-s font-extrabold tracking-tight text-primary-700">Document</h5>
         </Flex>
 
         <CMSDocumentInput control={control} />
       </Flex>
 
-      <Flex className="bg-white border border-neutral-200 rounded-lg mb-6">
-        <Flex className="p-6">
-          <h5 className="font-bold text-neutral-900">Description</h5>
+      <Flex className="min-w-0 rounded-2xl border border-neutral-200 bg-white shadow-[0_6px_24px_-20px_var(--primary-900)]">
+        <Flex className="border-b border-neutral-100 px-5 py-5 md:px-7">
+          <h5 className="text-body-s font-extrabold tracking-tight text-primary-700">Description</h5>
         </Flex>
 
         <CMSDescriptionInput
