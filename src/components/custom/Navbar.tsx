@@ -59,8 +59,8 @@ const Navbar = () => {
 
   return (
     <Flex className="relative z-999 shrink-0 overflow-visible font-sans [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_a:focus-visible]:outline-accent-600 [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-4 [&_button:focus-visible]:outline-accent-600">
-      <Flex className="relative z-20 h-14.5 flex-row! items-center gap-2 border-b border-neutral-200 bg-white px-4 xl:h-16 xl:px-20 shadow-[0_4px_24px_-16px_var(--primary-900)] max-xl:grid! max-xl:grid-cols-[76px_minmax(0,1fr)_76px] max-xl:px-3! max-xl:sm:px-6!">
-        <Flex className="contents! xl:hidden!">
+      <Flex className="relative z-20 grid! h-14.5 grid-cols-[76px_minmax(0,1fr)_76px] flex-row! items-center gap-2 border-b border-neutral-200 bg-white px-3 sm:px-6 xl:flex! xl:h-16 xl:px-20 min-[1024px]:landscape:flex! min-[1024px]:landscape:h-16 shadow-[0_4px_24px_-16px_var(--primary-900)]">
+        <Flex className="contents! xl:hidden! min-[1024px]:landscape:hidden!">
           <button
             type="button"
             className="flex size-11 shrink-0 items-center justify-center justify-self-start rounded-lg border border-neutral-200 bg-neutral-50 text-primary-600 transition-colors hover:bg-primary-50/40"
@@ -118,7 +118,7 @@ const Navbar = () => {
           </Link>
         </Flex>
 
-        <div className="mx-auto hidden w-full max-w-360 min-w-0 flex-1 items-center justify-between gap-6 xl:flex">
+        <div className="mx-auto hidden w-full max-w-360 min-w-0 flex-1 items-center justify-between gap-6 xl:flex min-[1024px]:landscape:flex">
           <Flex className="flex-row! shrink-0 items-center gap-5 xl:gap-6">
             <Link
               href="/"
@@ -132,7 +132,15 @@ const Navbar = () => {
                 height={42}
                 sizes="184px"
                 priority
-                className="block h-auto w-full object-contain"
+                className="hidden h-auto w-full object-contain xl:block"
+              />
+              <Image
+                src="/images/logo.png"
+                alt="PT. Inti Jaka Raya"
+                width={1012}
+                height={423}
+                sizes="115px"
+                className="block h-12 w-auto max-w-full object-contain xl:hidden"
               />
             </Link>
 
@@ -338,7 +346,7 @@ const Navbar = () => {
           </Flex>
         </div>
 
-        <Flex className="relative isolate h-10.5 w-19 shrink-0 flex-row! items-center justify-self-end rounded-[10px] border border-neutral-200 bg-neutral-50 p-0.75 xl:hidden!">
+        <Flex className="relative isolate h-10.5 w-19 shrink-0 flex-row! items-center justify-self-end rounded-[10px] border border-neutral-200 bg-neutral-50 p-0.75 xl:hidden! min-[1024px]:landscape:hidden!">
           <motion.button
             type="button"
             className="relative z-10 flex size-8.5 shrink-0 items-center justify-center rounded-[7px] text-caption font-extrabold tracking-wide"
@@ -379,7 +387,7 @@ const Navbar = () => {
 
       <AnimatePresence>
         {menuOpen && (
-          <Flex className="absolute inset-x-0 top-14.5 z-10 h-[calc(100dvh-3.625rem)] min-h-0 bg-primary-900/40 backdrop-blur-sm xl:hidden!">
+          <Flex className="absolute inset-x-0 top-14.5 z-10 h-[calc(100dvh-3.625rem)] min-h-0 bg-primary-900/40 backdrop-blur-sm xl:hidden! min-[1024px]:landscape:hidden!">
             <motion.div
               className="my-3 flex max-h-[calc(100dvh-5.125rem)] min-h-0 w-[calc(100%-24px)] max-w-xl shrink-0 self-center flex-col gap-4 overflow-y-auto overscroll-contain rounded-2xl border border-neutral-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl shadow-primary-900/10 sm:p-5"
               initial={{
