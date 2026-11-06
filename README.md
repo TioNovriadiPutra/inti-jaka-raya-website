@@ -131,7 +131,7 @@ flowchart LR
 
 - Node.js **20.9 or later**, using a supported LTS version.
 - npm and Git.
-- A Supabase project with the required tables, relationships, Storage buckets, and policies.
+- Authorized backend access provided by the project maintainer.
 
 ### 1. Install
 
@@ -141,49 +141,11 @@ cd inti-jaka-raya-website
 npm ci
 ```
 
-### 2. Configure environment variables
+### 2. Project access
 
-Create `.env.local` in the project root:
+Backend access and deployment configuration are managed privately by the project maintainer. Contact the maintainer for authorized development access.
 
-```dotenv
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_PUBLISHABLE_KEY=your-supabase-publishable-key
-NEXT_PUBLIC_SITE_URL=https://intijakaraya.com
-LOG_LEVEL=info
-```
-
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `SUPABASE_URL` | Yes | Supabase project endpoint |
-| `SUPABASE_PUBLISHABLE_KEY` | Yes | Publishable key used by the server-side Supabase clients |
-| `NEXT_PUBLIC_SITE_URL` | No | Canonical/sitemap origin; defaults to `https://intijakaraya.com` |
-| `LOG_LEVEL` | No | Pino log level; defaults to `debug` in development and `info` otherwise |
-
-Use the target deployment's public origin for `NEXT_PUBLIC_SITE_URL`. It is read by client code and must be set before building. Keep environment files out of version control. The application does not require a Supabase service-role key.
-
-### 3. Prepare Supabase
-
-The repository currently does **not** include database migrations or seed data. Configure the schema before testing database-dependent pages.
-
-| Main table | Related tables | Relationship |
-| --- | --- | --- |
-| `products` | `product_descriptions`, `product_galleries`, `product_documents` | One product to many descriptions, images, and documents |
-| `case_studies` | `case_study_descriptions`, `case_study_galleries`, `case_study_documents` | One case study to many descriptions, images, and documents |
-| `case_studies` | `products` | A case study references a product through `product_id` |
-| Products and case studies | `categories`, `industries`, `divisions`, `applications` | Classification through foreign keys |
-
-Important data conventions:
-
-- `is_showing = true` makes a product or case study eligible for public detail pages and the sitemap.
-- Gallery rows store `image_url`, `ori_width`, `ori_height`, and `is_thumbnail`.
-- Description rows store `title` and `description`; document rows store `doc_url` and `doc_name`.
-- Create Storage buckets named **`products`** and **`case-studies`**, with access policies suitable for the public media URLs used by the website.
-- Configure database Row Level Security and Storage policies for public reads and authorized content writes. CMS navigation and sign-in UI do not replace backend access policies.
-- Create an authorized Supabase Auth user to use the CMS.
-
-If using a different Supabase project, update the Storage hostname in `images.remotePatterns` inside [next.config.ts](next.config.ts).
-
-### 4. Start development
+### 3. Start development
 
 ```bash
 npm run dev
@@ -203,7 +165,7 @@ Open **http://localhost:3000**. Sign in through the website to work with CMS con
 
 There is currently no dedicated automated test script in `package.json`.
 
-## Routes and API
+## Public routes
 
 | Public route | Purpose |
 | --- | --- |
@@ -217,16 +179,6 @@ There is currently no dedicated automated test script in `package.json`.
 | `/robots.txt` | Crawler directives |
 
 CMS screens live under `/cms/products`, `/cms/case-studies`, and `/cms/labels`, with create/edit screens for each content type.
-
-| API group | Purpose |
-| --- | --- |
-| `/api/auth/login`, `/api/auth/logout`, `/api/auth/me` | Authentication and session checks |
-| `/api/catalog` | Catalog search, type selection, and filters |
-| `/api/carousel` | Five latest visible case studies with a thumbnail |
-| `/api/product/[id]` | Public product detail |
-| `/api/case-study/[id]` | Public case study detail |
-| `/api/product/*`, `/api/case-study/*` | Content management operations |
-| `/api/label/*`, `/api/dropdown` | Label management and dropdown data |
 
 ## Design and localization
 
@@ -258,7 +210,7 @@ After deployment, inspect a published product and case study in Google Search Co
 ## Deploy to Vercel
 
 1. Import this repository into Vercel with the **Next.js** framework preset.
-2. Configure the environment variables for the intended deployment environment.
+2. Coordinate private deployment setup with the project maintainer.
 3. Use `npm run build` as the build command and leave the output directory at its framework default.
 4. Deploy and verify the public pages, API routes, authentication, and uploaded media.
 5. Enable Vercel Analytics and Speed Insights for the project if you want to collect those metrics. Their components are already included in `_app.tsx`.
@@ -275,10 +227,6 @@ Sharp is loaded only when image uploads need metadata. `.npmrc` includes optiona
 ### Localized 404 / 500 output
 
 Explicit [404](src/pages/404.tsx) and [500](src/pages/500.tsx) pages use static generation so localized error documents are registered in the prerender manifest. Keep these files when changing build configuration.
-
-### Images from another Supabase project
-
-Update `images.remotePatterns` in `next.config.ts` and confirm the uploaded URLs are publicly accessible.
 
 </details>
 
